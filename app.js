@@ -31,11 +31,11 @@ var app = express();
 
 // Configure the app:
 //	{
-//		'port':		'8080',
+//		'port': '8080',
 //		'view':
 //		{
-//			'path':		'./views',
-//			'engine':	'ejs'
+//			'path': './views',
+//			'engine': 'ejs'
 //		}
 //	}
 
@@ -55,11 +55,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure the routes:
 //	{
-//		'/':					'routes.login',
-//		'/authorize':	'routes.authorize',
-//		'/register':	'routes.register',
-//		'/posts':			'routes.posts',
-//		'/logout':		'routes.logout',
+//		'/': 'routes.login',
+//		'/authorize': 'routes.authorize',
+//		'/register': 'routes.register',
+//		'/posts': 'routes.posts',
+//		'/logout': 'routes.logout',
 //		'/'
 //	}
 
