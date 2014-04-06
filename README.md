@@ -32,7 +32,7 @@ after completing step 1.</li>
 <pre>vagrant up;
 vagrant ssh;
 cd ../../vagrant;
-sudo npm -g install</pre>
+sudo npm -g install;</pre>
  in the repo directory to log in to the virtual machine and install node required packages</li>
 <li>execute:
 <pre>node app.js</pre>
