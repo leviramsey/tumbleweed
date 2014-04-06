@@ -14,7 +14,7 @@
 sudo apt-get install –y python-software-properties python g++ make;
 sudo add-apt-repository ppa:chris-lea/node.js;
 sudo apt-get update;
-sudo apt-get install node.js;
+sudo apt-get install nodejs;
 </pre>
  in the app directory to get the reccomended version of node.js
 </li>
