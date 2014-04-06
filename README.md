@@ -2,15 +2,37 @@
 
 <p>You have landed on tumbleweed's public github repository. This document is for helping new developers get started with tumbleweed.</p>
 
+<h4>A look at tumbleweed's dependencies</h4>
+<p>As a convienience, and to make development easier across different platforms, this tumbleweed repository uses a <a href='https://www.virtualbox.org/'>virtual box</a> running <a href='http://www.vagrantup.com'>vagrant</a> to simulate a Linux 32-bit environment. If you do not have these installed already you may or may not have to get them to contribute to this project.</p>
+
+<p>tumbleweed is currently running on node.js and is currently a node application. Therefore, you may have to install node.js</p>
+
+<h5>Installing node.js</h5>
+<ol>
+<li>
+<pre>sudo apt-get update;
+sudo apt-get install –y python-software-properties python g++ make;
+sudo add-apt-repository ppa:chris-lea/node.js;
+sudo apt-get update;
+sudo apt-get install node.js;
+</pre>
+ in the app directory to get the reccomended version of node.js
+</li>
+<li>You ought to be able to execute:
+<pre>node -v;
+npm -v;</pre>
+after completing step 1.</li>
+</ol>
+
 <h4>Getting started</h4>
 
 <ol>
 <li>clone the repo to local</li>
 <li>execute:
-<pre>vagrant up;</pre>
-<pre>vagrant ssh;</pre>
-<pre>cd ../../vagrant;</pre>
-<pre>sudo npm -g install</pre>
+<pre>vagrant up;
+vagrant ssh;
+cd ../../vagrant;
+sudo npm -g install</pre>
  in the repo directory to log in to the virtual machine and install node required packages</li>
 <li>execute:
 <pre>node app.js</pre>
