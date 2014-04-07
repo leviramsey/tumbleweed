@@ -7,27 +7,10 @@
 
 <p>tumbleweed is currently running on node.js and is currently a node application. Therefore, you may have to install node.js</p>
 
-<h5>Installing node.js</h5>
-<ol>
-<li>
-<pre>sudo apt-get update;
-sudo apt-get install –y python-software-properties python g++ make;
-sudo add-apt-repository ppa:chris-lea/node.js;
-sudo apt-get update;
-sudo apt-get install nodejs;
-</pre>
- in the app directory to get the reccomended version of node.js
-</li>
-<li>You ought to be able to execute:
-<pre>node -v;
-npm -v;</pre>
-after completing step 1.</li>
-</ol>
-
 <h4>Getting started</h4>
 
 <ol>
-<li>clone the repo to local</li>
+<li><h5>cloning the repo to local</h5></li>
 <ol>
  <li>Unless you have a github desktop application, you will be likely have to use command line <a href='http://git-scm.com/'>git</a> commands. To clone the repository to a local directory, execute:
  <pre>git clone https://github.com/spacenut/tumbleweed.git /this/local/directory/</pre></li>
@@ -47,19 +30,35 @@ not before setting the default push behavior:
 git remote set-url origin git@github.com:spacenut/tumbleweed.git;</pre>
 </li>
 </ol>
-<li><h5>Installing the base box</h5>
+<li><h5>installing the base box</h5>
 <p>After downloading the required software, a base box can be created in the application directory which will run the virtual Linux environment. You will only need to do this once after cloning the repo to local:</p>
 <pre>vagrant init precise32 http://files.vagrantup.com/precise32.box</pre></li>
 <li>execute:
 <pre>vagrant up;
-vagrant ssh;
-cd ../../vagrant;
+vagrant ssh;</pre>
+to set up and access the virtual machine.
+<li><h5>installing node.js</h5>
+<pre>sudo apt-get update;
+sudo apt-get install –y python-software-properties python g++ make;
+sudo add-apt-repository ppa:chris-lea/node.js;
+sudo apt-get update;
+sudo apt-get install nodejs;
+</pre>
+ in the app directory to get the reccomended version of node.js. You should now be able to execute:
+<pre>node -v;
+npm -v;</pre>
+after completing this step.</li>
+
+<li><h5>installing node dependencies</h5>
+execute: <pre>cd ../../vagrant;
 sudo npm -g install;</pre>
  in the repo directory to log in to the virtual machine and install node required packages</li>
-<li>execute:
+<li><h5>running the app server</h5>
+Finally, execute:
 <pre>node app.js</pre>
  to run the tumbleweed app server</li>
-<li>visit:
+<li><h5>viewing the web app</h5>
+visit:
 <pre>localhost:8080</pre>
  in any web browser to look at the site.</li>
 </ol>
