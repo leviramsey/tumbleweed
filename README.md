@@ -28,6 +28,24 @@ after completing step 1.</li>
 
 <ol>
 <li>clone the repo to local</li>
+<ol>
+ <li>Unless you have a github desktop application, you will be likely have to use command line <a href='http://git-scm.com/'>git</a> commands. To clone the repository to a local directory, execute:
+ <pre>git clone https://github.com/spacenut/tumbleweed.git /this/local/directory/</pre></li>
+ <li>To commit changes use:</li>
+ <pre>git commit</pre>
+ not before setting your identity using:
+ <pre>git config user.name "John Doe";
+git config user.email john.doe@example.com;</pre>
+</li>
+<li>To pull changes from the tumbleweed remote repository, execute:
+<pre>git pull</pre>
+</li>
+<li>To push your changes upstream (to the remote server) execute:
+<pre>git push</pre>
+not before setting the default push behavior:
+<pre>git config push.default upstream</pre>
+</li>
+</ol>
 <li>execute:
 <pre>vagrant up;
 vagrant ssh;
