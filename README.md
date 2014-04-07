@@ -43,7 +43,8 @@ git config user.email john.doe@example.com;</pre>
 <li>To push your changes upstream (to the remote server) execute:
 <pre>git push</pre>
 not before setting the default push behavior:
-<pre>git config push.default upstream</pre>
+<pre>git config push.default upstream;
+git remote set-url origin git@github.com:spacenut/tumbleweed.git;</pre>
 </li>
 </ol>
 <li>execute:
