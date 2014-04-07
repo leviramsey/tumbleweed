@@ -47,6 +47,9 @@ not before setting the default push behavior:
 git remote set-url origin git@github.com:spacenut/tumbleweed.git;</pre>
 </li>
 </ol>
+<li><h5>Installing the base box</h5>
+<p>After downloading the required software, a base box can be created in the application directory which will run the virtual Linux environment. You will only need to do this once after cloning the repo to local:</p>
+<pre>vagrant init precise32 http://files.vagrantup.com/precise32.box</pre></li>
 <li>execute:
 <pre>vagrant up;
 vagrant ssh;
