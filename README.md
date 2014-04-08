@@ -27,7 +27,22 @@ git config user.email john.doe@example.com;</pre>
 <pre>git push</pre>
 not before setting the default push behavior:
 <pre>git config push.default upstream;
-git remote set-url origin git@github.com:spacenut/tumbleweed.git;</pre>
+git remote rm origin;
+git remote add origin git@github.com:spacenut/tumbleweed.git;</pre>
+</li>
+<li>
+<ol><li><h5>managing your authentication</h5>
+You may be unable to pull and push from the remote origin. If this is the case, you may need to generate or link a public key to attach to your GitHub account. On Linux machines, execute:
+<pre>ssh-keygen</pre>
+ and follow the instructions listed. Alternatively, use an already generated public key.
+</li>
+<li>
+Execute:
+<pre>cat ~/.ssh/is_rsa.pub</pre>
+ or wherever you chose to save the public key, and copy the contents into a new SSH key in <a about='_blank' href='https://github.com/settings/ssh'>account settings</a>.
+</li>
+</ol>
+
 </li>
 </ol>
 <li><h5>run and access Vagrant machine</h5> execute:
