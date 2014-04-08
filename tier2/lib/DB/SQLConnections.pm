@@ -37,14 +37,16 @@ my $make_connection=sub {
 
 sub get_connection {
 	(my $queries) = @_;
+	say STDERR scalar @connpool;
 	while ((my $index, my $lst) = each @connpool) {
-		if ($lst->[1]) {
+		unless ($lst->[1]) {
 			$lst->[1]=1;
 			if ($lst->[0]->ping()) {
 				say STDERR 'Using pre-existing connection';
 				return ($lst->[0], $lst->[2]);
 			} else {
 				say STDERR 'Connection died';
+				$lst->[0]->disconnect();
 				splice(@connpool, $index, 1);
 				next;
 			}
@@ -70,7 +72,6 @@ sub done_with_conn {
 		for (grep { $_->[0] == $conn } @connpool) {
 			$_->[1]=0;
 		}
-		$conn->disconnect();
 	}
 }
 
