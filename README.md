@@ -34,7 +34,7 @@ after completing this step.</li>
 
 <li><h5>installing node dependencies</h5>
 execute: <pre>cd ../../vagrant;
-sudo npm -g install;</pre>
+sudo npm install;</pre>
  in the repo directory to log in to the virtual machine and install node required packages</li>
 <li><h5>running the app server</h5>
 Finally, execute:
