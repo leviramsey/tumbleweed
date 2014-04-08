@@ -14,36 +14,7 @@
 <ol>
  <li>Unless you have a github desktop application, you will be likely have to use command line <a href='http://git-scm.com/'>git</a> commands. To clone the repository to a local directory, execute:
  <pre>git clone https://github.com/spacenut/tumbleweed.git /this/local/directory/</pre></li>
-<li>To pull changes from the tumbleweed remote repository, execute:
-<pre>git pull</pre>
-</li>
- <li>To commit changes use:</li>
- <pre>git commit</pre>
- not before setting your identity using:
- <pre>git config user.name "John Doe";
-git config user.email john.doe@example.com;</pre>
-</li>
-<li>To push your changes upstream (to the remote server) execute:
-<pre>git push</pre>
-not before setting the default push behavior:
-<pre>git config push.default upstream;
-git remote rm origin;
-git remote add origin git@github.com:spacenut/tumbleweed.git;</pre>
-</li>
-<li>
-<ol><li><h5>managing your authentication</h5>
-You may be unable to pull and push from the remote origin. If this is the case, you may need to generate or link a public key to attach to your GitHub account. On Linux machines, execute:
-<pre>ssh-keygen</pre>
- and follow the instructions listed. Alternatively, use an already generated public key.
-</li>
-<li>
-Execute:
-<pre>cat ~/.ssh/is_rsa.pub</pre>
- or wherever you chose to save the public key, and copy the contents into a new SSH key in <a about='_blank' href='https://github.com/settings/ssh'>account settings</a>.
-</li>
-</ol>
 
-</li>
 </ol>
 <li><h5>run and access Vagrant machine</h5> execute:
 <pre>vagrant up;
@@ -73,6 +44,46 @@ Finally, execute:
 visit:
 <pre>localhost:8080</pre>
  in any web browser to look at the site.</li>
+</ol>
+
+<h4>Using Git</h4>
+
+<p>If you have a GitHub desktop application, much of this can be safely ignored, otherwise here is an overview of some basic Git commands you find useful.</p>
+
+<ol>
+<li><h5>pulling remote changes</h5>
+To pull changes from the tumbleweed remote repository, execute:
+<pre>git pull</pre>
+</li>
+ <li><h5>commiting local changes</h5>
+ To commit your local changes use:</li>
+ <pre>git commit</pre>
+ not before setting your identity using:
+ <pre>git config user.name "John Doe";
+git config user.email john.doe@example.com;</pre>
+</li>
+<li><h5>pushing your commit upstream</h5>
+To push your changes upstream (to the remote server) execute:
+<pre>git push</pre>
+not before setting the default push behavior:
+<pre>git config push.default upstream;
+git remote rm origin;
+git remote add origin git@github.com:spacenut/tumbleweed.git;</pre>
+</li>
+<li>
+<ol><li><h5>managing your authentication</h5>
+You may be unable to pull and push from the remote origin. If this is the case, you may need to generate or link a public key to attach to your GitHub account. On Linux machines, execute:
+<pre>ssh-keygen</pre>
+ and follow the instructions listed. Alternatively, use an already generated public key.
+</li>
+<li>
+Execute:
+<pre>cat ~/.ssh/is_rsa.pub</pre>
+ or wherever you chose to save the public key, and copy the contents into a new SSH key in <a about='_blank' href='https://github.com/settings/ssh'>account settings</a>.
+</li>
+</ol>
+
+</li>
 </ol>
 
 <h4>Changing the app's port number</h4>
