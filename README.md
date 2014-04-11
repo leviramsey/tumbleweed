@@ -22,7 +22,7 @@ vagrant ssh;</pre>
 to set up and access the virtual machine.
 <li><h5>installing node.js</h5>
 <pre>sudo apt-get update;
-sudo apt-get install –y python-software-properties python g++ make;
+sudo apt-get install software-properties-common python-software-properties;
 sudo add-apt-repository ppa:chris-lea/node.js;
 sudo apt-get update;
 sudo apt-get install nodejs;
