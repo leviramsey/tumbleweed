@@ -9,14 +9,17 @@ use lib('lib/');
 use DB::SQLConnections;
 use Math::Random::Secure;
 
+my $verification_enabled=0;
+
 sub crypt_password {
 	(my $pass, my $cost) = @_;
+	$cost //= 10;
 	return undef unless ($cost < 32);
 	my $crypter=Digest->new('Bcrypt');
 	$crypter->cost($cost);
 	$crypter->salt('abcdefghijklmnop');
 	$crypter->add($pass);
-	return $crypter->bcrypt_b64digest;
+	return ($crypter->bcrypt_b64digest, $cost);
 }
 
 {
@@ -78,7 +81,7 @@ sub authentication {
 			$queries->{'get_pwhash'}->execute($uid);
 			(my $hash, my $cost) = fetchrow_array_single($queries->{'get_pwhash'});
 			if (defined $hash && defined $pass) {
-				my $pwhash=crypt_password($pass, $cost);
+				(my $pwhash, undef)=crypt_password($pass, $cost);
 
 				if ($pwhash eq $hash) {
 					# Authenticated
@@ -154,8 +157,9 @@ sub create_user {
 				error_hash($ret, 2, '3rd party authentication not yet implemented');
 				die;
 			}
+
 			for ($queries->{'create_user'}) {
-				$_->execute($user, $email, 0);
+				$_->execute($user, $email, 1-$verification_enabled);
 				$_->finish;
 			}
 			$queries->{'get_uid_from_name'}->execute($user);
@@ -165,11 +169,22 @@ sub create_user {
 				die;
 			}
 
-			create_verification_code($ret, $uid, $queries);
+			(my $pwhash, my $pwcost)=crypt_password($auth);
+			$queries->{'add_password'}->execute($uid, $pwhash, $pwcost);
+			$queries->{'add_password'}->finish();
+			say STDERR "password created";
+			if ($verification_enabled) {
+				create_verification_code($ret, $uid, $queries);
+			}
 		};
 		DB::SQLConnections::done_with_conn($conn, 'commit');
 	} else {
 		error_hash($ret, 5, 'Username, email, and authentication information required');
+	}
+
+	unless ($ret->{status}) {
+		# No error => success!
+		$ret->{status}=0;
 	}
 	return encode_json($ret);
 }
@@ -245,6 +260,8 @@ post '/query' => sub {
 			$resp="";
 		}
 		return $self->render(data => $resp);
+	} elsif (defined $params{debug}) {
+		return $self->render(data => encode_json({ tumbleweed => "IS ALIVE!" }) );
 	}
 	$self->render(text => "");
 };

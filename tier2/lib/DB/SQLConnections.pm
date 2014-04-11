@@ -7,15 +7,23 @@ package DB::SQLConnections;
 use DBI;
 use feature ':5.12';
 
+use lib('../');
+use DB::Password;
+
+use threads;
+use Thread::Semaphore;
+
 # A list of [ $DBI_connection_handle, $working, %queries ]s
 my @connpool;
+
+my $semaphore=Thread::Semaphore->new();
 
 my $make_connection=sub {
 	(my $querystrings) = @_;
 	my $conn=DBI->connect(
 		'dbi:mysql:tumbleweed',
 		'levi',
-		'ph1l1ke',
+		$DB::Password::mine,
 		{ AutoCommit => 1, }
 	);
 
@@ -39,17 +47,22 @@ sub get_connection {
 	(my $queries) = @_;
 	say STDERR scalar @connpool;
 	while ((my $index, my $lst) = each @connpool) {
+		$semaphore->down();
 		unless ($lst->[1]) {
 			$lst->[1]=1;
 			if ($lst->[0]->ping()) {
 				say STDERR 'Using pre-existing connection';
+				$semaphore->up();
 				return ($lst->[0], $lst->[2]);
 			} else {
 				say STDERR 'Connection died';
 				$lst->[0]->disconnect();
 				splice(@connpool, $index, 1);
+				$semaphore->up();
 				next;
 			}
+		} else {
+			$semaphore->up();
 		}
 	}
 	# None available...
