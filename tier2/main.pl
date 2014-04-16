@@ -90,7 +90,7 @@ sub authentication { (my $obj) = @_;
 
 		$connector->txn(fixup => sub {
 				my $dbh=$_;
-				my $queries=sub { query_get($_[0], $dbh); }
+				my $queries=sub { query_get($_[0], $dbh); };
 				$queries->('get_uid_from_name')->execute($user);
 				(my $uid)=fetchrow_array_single($queries->('get_uid_from_name'));
 				if (defined $uid) {
@@ -160,7 +160,7 @@ sub new_create_user { (my $obj) = @_;
 		# Verify that name and email aren't taken
 		$connector->txn(fixup => sub {
 				my $dbh=$_;
-				my $queries=sub { query_get($_[0], $dbh); }
+				my $queries=sub { query_get($_[0], $dbh); };
 				$queries->('name_email_taken')->execute($user, $email);
 				eval {
 					(my $cnt) = fetchrow_array_single($queries->('name_email_taken'));
