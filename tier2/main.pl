@@ -33,7 +33,7 @@ sub crypt_password {
 	my %sql_queries=(
 		get_uid_from_name => 'SELECT uid FROM users WHERE name=?',
 		get_pwhash => 'SELECT hash,cost FROM user_auths WHERE uid=?',
-		create_user => 'INSERT INTO users (name,email,verified) VALUES (?,?,1)',
+		create_user => 'INSERT INTO users (name,email,verified,long_name,dob) VALUES (?,?,1,?,?)',
 		add_validation => 'INSERT INTO user_verifies (uid,code) VALUES (?,?)',
 		get_validation => 'SELECT code FROM user_verifies WHERE uid=?',
 		del_validation => 'DELETE FROM user_verifies WHERE uid=?',
@@ -59,6 +59,11 @@ sub crypt_password {
 		return undef;
 	}
 }
+
+my %res=(
+	digitx4 => qr/^\d{4}$/,
+	digitx2 => qr/^\d{2}$/,
+);
 
 sub error_hash { (my $href, my $status, my $desc) = @_;
 	return unless ((ref $href) eq 'HASH');
@@ -151,12 +156,12 @@ sub create_verification_code { (my $ret, my $uid, my $queries) = @_;
 	$ret->{validation_code}=$code;
 }
 
-sub new_create_user { (my $obj) = @_;
+sub create_user { (my $obj) = @_;
 	my $ret={ response_to => 'create_user' };
 
-	my @interested=@{$obj}{qw/user email auth/};
-	if (3 == scalar grep { defined $_ } @interested) {
-		(my $user, my $email, my $auth) = @interested;
+	my @interested=@{$obj}{qw/user email auth long_name dob/};
+	if (scalar(@interested) == scalar grep { defined $_ } @interested) {
+		(my $user, my $email, my $auth, my $long_name, my $dob) = @interested;
 		
 		$ret->{user}=$user;
 		# Verify that name and email aren't taken
@@ -174,12 +179,22 @@ sub new_create_user { (my $obj) = @_;
 						# TODO: 3rd party authentication
 						die_error_hash($ret, 2, '3rd party authentication not yet implemented');
 					}
+
+					my $dobstr;
+					say STDERR $dob;
+					unless (((ref $dob) eq 'HASH') &&
+					        (3 == scalar grep { exists $dob->{$_}; } qw/year month day/)) {
+						die_error_hash($ret, 3, 'DOB must be specified as an object with members year, month, day');
+					}
+					say STDERR $dob->{month};
+					$dobstr=sprintf("%04d-%02d-%02d", @{$dob}{qw/year month day/});
+					say STDERR $dobstr;
 					
-					$queries->('create_user')->execute($user, $email);
+					$queries->('create_user')->execute($user, $email, $long_name, $dobstr);
 					$queries->('get_uid_from_name')->execute($user);
 					(my $uid)=fetchrow_array_single($queries->('get_uid_from_name'));
 					unless (defined $uid) {
-						die_error_hash($ret, 3, 'Could not create user');
+						die_error_hash($ret, 5, 'Could not create user');
 					}
 
 					(my $pwhash, my $pwcost)=crypt_password($auth);
@@ -187,7 +202,7 @@ sub new_create_user { (my $obj) = @_;
 				}
 			});
 	} else {
-		error_hash($ret, 5, 'Username, email, and authentication information required');
+		error_hash($ret, 6, 'Username, email, long name, date of birth, and authentication information required');
 	}
 
 	unless ($ret->{status}) {

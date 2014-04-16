@@ -6,7 +6,9 @@ CREATE TABLE users (
 	uid INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(16) NOT NULL,
 	email VARCHAR(32) NOT NULL,
-	verified BOOLEAN NOT NULL
+	verified BOOLEAN NOT NULL,
+	long_name VARCHAR(40) NOT NULL,
+	dob DATE NOT NULL
 ) ENGINE 'InnoDB';
 
 --- Not yet implemented in tier2
