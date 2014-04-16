@@ -16,6 +16,8 @@ my $connector=DBIx::Connector->new(
 	$DB::Password::mine,
 );
 
+app->config(hypnotoad => { listen => [ 'http://*:3001' ] });
+
 sub crypt_password {
 	(my $pass, my $cost) = @_;
 	$cost //= 10;
