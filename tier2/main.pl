@@ -59,10 +59,10 @@ sub crypt_password {
 		return undef;
 	}
 }
-
 my %res=(
 	digitx4 => qr/^\d{4}$/,
 	digitx2 => qr/^\d{2}$/,
+	digitx1_plus => qr/^\d+$/,
 );
 
 sub error_hash { (my $href, my $status, my $desc) = @_;
@@ -212,9 +212,51 @@ sub create_user { (my $obj) = @_;
 	return encode_json($ret);
 }
 
+sub user_info { (my $obj) = @_;
+	my $ret={ response_to => 'user_info' };
+
+	if ((defined $obj->{uid}) ||
+		(defined $obj->{name})) {
+		my $uid=$obj->{uid};
+		my $name=$obj->{name};
+		unless (defined $uid) {
+			$connector->txn(fixup => sub {
+					my $dbh=$_;
+					my $queries=sub { query_get($_[0], $dbh); };
+					$queries->('get_uid_from_name')->execute($name);
+					($uid) = fetchrow_array_single($queries->('get_uid_from_name'));
+				});
+		}
+
+		eval {
+			unless ((defined $uid) && ($uid =~ /$res{digitx1_plus}/)) {
+				# Give up
+				die_error_hash($ret, 2, 'No user by that name');
+			}
+
+			$connector->txn(fixup => sub {
+				my $dbh=$_;
+				my $queries=sub { query_get($_[0], $dbh); };
+				$queries->('get_user_info_from_uid')->execute($uid);
+				$ret->{row}=$queries->('get_user_info_from_uid')->fetchrow_hashref();
+			});
+		}
+	} else {
+		error_hash($ret, 1, 'Must provide user ID or name');
+	}
+
+	unless ($ret->{status}) {
+		# No error => success!
+		$ret->{status}=0;
+	}
+
+	return encode_json($ret);
+}
+
 my %query_types = (
 	authentication => \&authentication,
 	create_user => \&create_user,
+	user_info => \&user_info,
 );
 
 post '/query' => sub {
