@@ -6,10 +6,15 @@ use Digest;
 
 use lib('lib/');
 
-use DB::SQLConnections;
+use DBIx::Connector;
+use DB::Password;
 use Math::Random::Secure;
 
-my $verification_enabled=0;
+my $connector=DBIx::Connector->new(
+	'dbi:mysql:tumbleweed',
+	'levi',
+	$DB::Password::mine,
+);
 
 sub crypt_password {
 	(my $pass, my $cost) = @_;
@@ -26,7 +31,7 @@ sub crypt_password {
 	my %sql_queries=(
 		get_uid_from_name => 'SELECT uid FROM users WHERE name=?',
 		get_pwhash => 'SELECT hash,cost FROM user_auths WHERE uid=?',
-		create_user => 'INSERT INTO users (name,email,verified) VALUES (?,?,?)',
+		create_user => 'INSERT INTO users (name,email,verified) VALUES (?,?,1)',
 		add_validation => 'INSERT INTO user_verifies (uid,code) VALUES (?,?)',
 		get_validation => 'SELECT code FROM user_verifies WHERE uid=?',
 		del_validation => 'DELETE FROM user_verifies WHERE uid=?',
@@ -37,12 +42,19 @@ sub crypt_password {
 		get_user_info_from_uid => 'SELECT * FROM users WHERE uid=?',
 	);
 
-	sub get_connection {
-		my @ret=DB::SQLConnections::get_connection(\%sql_queries);
-		if (defined $ret[0]) {
-			$ret[0]->begin_work;
+	my %queries;
+	my $last_dbh;
+
+	sub query_get { (my $name, my $conn) = @_;
+		my $query=$queries{$name};
+		unless ((defined $query) && ($query->{Database} == $conn)) {
+			$queries{$name}=$query=$conn->prepare($sql_queries{$name});
 		}
-		return @ret;
+		return $query;
+	}
+
+	sub get_connection {
+		return undef;
 	}
 }
 
@@ -51,6 +63,11 @@ sub error_hash { (my $href, my $status, my $desc) = @_;
 
 	$href->{status}=$status;
 	$href->{error_desc}=$desc;
+}
+
+sub die_error_hash {
+	error_hash(@_);
+	die [ $_[1], $_[0] ];
 }
 
 sub fetchrow_array_single { (my $sth) = @_;
@@ -62,46 +79,48 @@ sub fetchrow_array_single { (my $sth) = @_;
 	return @ret;
 }
 
-sub authentication {
-	(my $obj) = @_;
-
+sub authentication { (my $obj) = @_;
 	my $ret={ response_to => 'authentication' };
 
 	if (defined $obj->{user}) {
 		my $user=$obj->{user};
-		my $pass=$obj->{password};	# possibly undef!
+		my $pass=$obj->{pass};
 
 		$ret->{user}=$user;
 
-		# verify password in DB...
-		(my $conn, my $queries) = get_connection();
-		$queries->{'get_uid_from_name'}->execute($user);
-		(my $uid) = fetchrow_array_single($queries->{'get_uid_from_name'});
-		if (defined $uid) {
-			$queries->{'get_pwhash'}->execute($uid);
-			(my $hash, my $cost) = fetchrow_array_single($queries->{'get_pwhash'});
-			if (defined $hash && defined $pass) {
-				(my $pwhash, undef)=crypt_password($pass, $cost);
+		$connector->txn(fixup => sub {
+				my $dbh=$_;
+				my $queries=sub { query_get($_[0], $dbh); }
+				$queries->('get_uid_from_name')->execute($user);
+				(my $uid)=fetchrow_array_single($queries->('get_uid_from_name'));
+				if (defined $uid) {
+					$queries->('get_pwhash')->execute($uid);
+					(my $hash, my $cost) = fetchrow_array_single($queries->('get_pwhash'));
+					if ((defined $hash) && (defined $pass)) {
+						(my $pwhash, undef) = crypt_password($pass, $cost);
 
-				if ($pwhash eq $hash) {
-					# Authenticated
-					$ret->{status}=0;
-					$queries->{'user_validated'}->execute($uid);
-					(my $cnt) = fetchrow_array_single($queries->{'user_validated'});
-					$ret->{validated}=$cnt;
+						if ($pwhash eq $hash) {
+							# Authenticated
+							$ret->{status}=0;
+							$queries->('user_validated')->execute($uid);
+							(my $cnt)=fetchrow_array_single($queries->('user_validated'));
+							$ret->{validated}=$cnt;
+						} else {
+							# Password did not match
+							error_hash($ret, 1, 'Password did not match');
+						}
+					} elsif (defined $hash) {
+						# Password not specified but needed
+						error_hash($ret, 2, 'User must authenticate with password');
+					} else {
+						# 3rd party authentication, password not needed
+						error_hash($ret, 3, '3rd party authentication (not yet implemented)');
+					}
 				} else {
-					# Password did not match
-					error_hash($ret, 1, 'Password did not match');
-				}
-			} else {
-				error_hash($ret, 2, 'User does not have password.  3rd party authentication');
-			}
-		} else {
-			error_hash($ret, 3, 'User not found');
-		}
-		DB::SQLConnections::done_with_conn($conn, 'commit');
+					error_hash($ret, 4, 'User not found');
+				}});
 	} else {
-		error_hash($ret, 4, 'Username required');
+		error_hash($ret, 5, 'Username required');
 	}
 
 	return encode_json($ret);
@@ -130,54 +149,41 @@ sub create_verification_code { (my $ret, my $uid, my $queries) = @_;
 	$ret->{validation_code}=$code;
 }
 
-sub create_user {
-	(my $obj) = @_;
-
+sub new_create_user { (my $obj) = @_;
 	my $ret={ response_to => 'create_user' };
 
-	if ((defined $obj->{user}) &&
-		(defined $obj->{email}) &&
-		(defined $obj->{auth})) {
-		my $user=$obj->{user};
-		my $email=$obj->{email};
-		my $auth=$obj->{auth};
-
+	my @interested=@{$obj}{qw/user email auth/};
+	if (3 == scalar grep { defined $_ } @interested) {
+		(my $user, my $email, my $auth) = @interested;
+		
 		$ret->{user}=$user;
 		# Verify that name and email aren't taken
-		(my $conn, my $queries) = get_connection();
-		$queries->{'name_email_taken'}->execute($user, $email);
-		eval {
-			(my $cnt)=fetchrow_array_single($queries->{'name_email_taken'});
-			if ($cnt) {
-				error_hash($ret, 1, 'Username or email taken');
-				die;
-			}
-			if (ref $auth) {
-				# TODO: 3rd party authentication
-				error_hash($ret, 2, '3rd party authentication not yet implemented');
-				die;
-			}
+		$connector->txn(fixup => sub {
+				my $dbh=$_;
+				my $queries=sub { query_get($_[0], $dbh); }
+				$queries->('name_email_taken')->execute($user, $email);
+				eval {
+					(my $cnt) = fetchrow_array_single($queries->('name_email_taken'));
+					if ($cnt) {
+						die_error_hash($ret, 1, 'Username or email taken');
+					}
 
-			for ($queries->{'create_user'}) {
-				$_->execute($user, $email, 1-$verification_enabled);
-				$_->finish;
-			}
-			$queries->{'get_uid_from_name'}->execute($user);
-			(my $uid)=fetchrow_array_single($queries->{'get_uid_from_name'});
-			unless (defined $uid) {
-				error_hash($ret, 3, 'Could not create user');
-				die;
-			}
+					if (ref $auth) {
+						# TODO: 3rd party authentication
+						die_error_hash($ret, 2, '3rd party authentication not yet implemented');
+					}
+					
+					$queries->('create_user')->execute($user, $email);
+					$queries->('get_uid_from_name')->execute($user);
+					(my $uid)=fetchrow_array_single($queries->('get_uid_from_name'));
+					unless (defined $uid) {
+						die_error_hash($ret, 3, 'Could not create user');
+					}
 
-			(my $pwhash, my $pwcost)=crypt_password($auth);
-			$queries->{'add_password'}->execute($uid, $pwhash, $pwcost);
-			$queries->{'add_password'}->finish();
-			say STDERR "password created";
-			if ($verification_enabled) {
-				create_verification_code($ret, $uid, $queries);
-			}
-		};
-		DB::SQLConnections::done_with_conn($conn, 'commit');
+					(my $pwhash, my $pwcost)=crypt_password($auth);
+					$queries->('add_password')->execute($uid, $pwhash, $pwcost);
+				}
+			});
 	} else {
 		error_hash($ret, 5, 'Username, email, and authentication information required');
 	}
@@ -189,63 +195,9 @@ sub create_user {
 	return encode_json($ret);
 }
 
-sub validate_user { (my $obj) = @_;
-	my $ret={ response_to => 'validate_user', };
-
-	if ((defined $obj->{user}) &&
-		(defined $obj->{code})) {
-		my $user=$obj->{user};
-		my $code=lc $obj->{code};
-
-		# Get UID
-		(my $conn, my $queries) = get_connection();
-		$queries->{'get_uid_from_name'}->execute($user);
-		eval {
-			(my $uid) = fetchrow_array_single($queries->{'get_uid_from_name'});
-			unless (defined $uid) {
-				error_hash($ret, 1, 'User not found');
-				die;
-			}
-
-			$queries->{'get_validation'}->execute($uid);
-			(my $dbc) = fetchrow_array_single($queries->{'get_validation'});
-			unless (defined $dbc) {
-				$queries->{'user_validated'}->execute($uid);
-				(my $cnt) = fetchrow_array_single($queries->{'user_validated'});
-				if ($cnt) {
-					error_hash($ret, 2, 'User already validated');
-				} else {
-					# Somehow we lost the validation
-					$ret->{new_validation}={ };
-					create_verification_code($ret->{new_validation}, $uid, $queries);
-					error_hash($ret, 3, 'New validation created');
-				}
-				die;
-			}
-
-			unless ($dbc eq $code) {
-				error_hash($ret, 4, 'Incorrect code');
-				die;
-			}
-
-			$queries->{'del_validation'}->execute($uid);
-			$queries->{'validate_user'}->execute($uid);
-
-			$ret->{status}=0;
-		};
-		DB::SQLConnections::done_with_conn($conn, 'commit');
-	} else {
-		error_hash($ret, undef, 'User and code required');
-		$ret->{status}=undef;
-		$ret->{error_desc}='User and code required';
-	}
-	return encode_json($ret);
-}
-
 my %query_types = (
 	authentication => \&authentication,
 	create_user => \&create_user,
-	validate_user => \&validate_user,
 );
 
 post '/query' => sub {

@@ -9,6 +9,7 @@ CREATE TABLE users (
 	verified BOOLEAN NOT NULL
 ) ENGINE 'InnoDB';
 
+--- Not yet implemented in tier2
 CREATE TABLE user_verifies (
 	uid INT(8) UNSIGNED PRIMARY KEY,
 	code VARCHAR(8) NOT NULL,
