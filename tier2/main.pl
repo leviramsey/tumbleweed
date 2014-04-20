@@ -10,6 +10,8 @@ use DBIx::Connector;
 use DB::Password;
 use Math::Random::Secure;
 
+use Mojo::Log;
+
 my $connector=DBIx::Connector->new(
 	'dbi:mysql:tumbleweed',
 	'levi',
@@ -17,6 +19,25 @@ my $connector=DBIx::Connector->new(
 );
 
 app->config(hypnotoad => { listen => [ 'http://*:3001' ] });
+
+{
+	my @levels=qw/info warn error/;
+	my %logs=map { $_ => Mojo::Log->new(path => "/var/log/mojo/$_.log", level => "$_"); } @levels;
+
+	my %loggers;
+	my %foo=%Mojo::Log::;
+	for (@levels) {
+		$loggers{$_}=$foo{$_};
+	}
+
+	sub log_it { my $level=shift @_;
+		for (values %logs) {
+			if (defined $loggers{$level}) {
+				$loggers{$level}->($logs{$level}, @_);
+			}
+		}
+	}
+}
 
 sub crypt_password {
 	(my $pass, my $cost) = @_;
@@ -42,6 +63,11 @@ sub crypt_password {
 		name_email_taken => 'SELECT COUNT(uid) FROM users WHERE name=? OR email=?',
 		user_validated => 'SELECT COUNT(uid) FROM users WHERE uid=? AND verified=1',
 		get_user_info_from_uid => 'SELECT * FROM users WHERE uid=?',
+		get_all_extdata => 'SELECT k,v,priority,display FROM user_extdata WHERE uid=?',
+		get_top_disp_extdata => 'SELECT k,v FROM user_extdata WHERE display=1 ORDER BY priority DESC LIMIT ? WHERE uid=?',
+		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
+		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
+		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
 	);
 
 	my %queries;
@@ -212,13 +238,9 @@ sub create_user { (my $obj) = @_;
 	return encode_json($ret);
 }
 
-sub user_info { (my $obj) = @_;
-	my $ret={ response_to => 'user_info' };
-
-	if ((defined $obj->{uid}) ||
-		(defined $obj->{name})) {
-		my $uid=$obj->{uid};
-		my $name=$obj->{name};
+# Reserves error codes 1 and 2
+sub user_id_or_name { (my $uid, my $name) = @_;
+	if ((defined $uid) || (defined $name)) {
 		unless (defined $uid) {
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
@@ -227,22 +249,29 @@ sub user_info { (my $obj) = @_;
 					($uid) = fetchrow_array_single($queries->('get_uid_from_name'));
 				});
 		}
+		
+		if ((defined $uid) && ($uid =~ /$res{digitx1_plus}/)) {
+			return ($uid, undef, undef);
+		}
+		return (undef, 2, 'No user by that name');
+	} else {
+		return (undef, 1, 'Must provide user ID or name');
+	}
+}
 
-		eval {
-			unless ((defined $uid) && ($uid =~ /$res{digitx1_plus}/)) {
-				# Give up
-				die_error_hash($ret, 2, 'No user by that name');
-			}
+sub user_info { (my $obj) = @_;
+	my $ret={ response_to => 'user_info' };
 
-			$connector->txn(fixup => sub {
+	(my $uid, my $status, my $error_text) = user_id_or_name($obj->{uid}, $obj->{name});
+	unless (defined $uid) {
+		error_hash($ret, $status, $error_text);
+	} else {
+		$connector->txn(fixup => sub {
 				my $dbh=$_;
 				my $queries=sub { query_get($_[0], $dbh); };
 				$queries->('get_user_info_from_uid')->execute($uid);
 				$ret->{row}=$queries->('get_user_info_from_uid')->fetchrow_hashref();
 			});
-		}
-	} else {
-		error_hash($ret, 1, 'Must provide user ID or name');
 	}
 
 	unless ($ret->{status}) {
@@ -253,10 +282,99 @@ sub user_info { (my $obj) = @_;
 	return encode_json($ret);
 }
 
+sub user_extended_data { (my $obj) = @_;
+	my $ret={ response_to => 'user_extinfo' };
+
+	(my $uid, my $status, my $error_text) = user_id_or_name($obj->{uid}, $obj->{name});
+
+	unless (defined $uid) {
+		error_hash($ret, $status, $error_text);
+	} else {
+		my @binds=($uid);
+		my $query_name='get_all_extdata';
+		if ((defined $obj->{n}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
+			unshift @binds, $obj->{n};
+			$query_name='get_top_disp_extdata';
+		}
+
+		$connector->txn(fixup => sub {
+				my $dbh=$_;
+				my $queries=sub { query_get($_[0], $dbh); };
+				$queries->($query_name)->execute(@binds);
+				$ret->{results}=$queries->($query_name)->fetchall_arrayref;
+			});
+	}
+
+	unless ($ret->{status}) {
+		$ret->{status}=0;
+	}
+
+	return encode_json($ret);
+}
+
+sub add_extended_data { (my $obj) = @_;
+	my $ret={ response_to => 'add_extended_data' };
+
+	(my $uid, my $status, my $error_text) = user_id_or_name($obj->{uid}, $obj->{name});
+
+	unless (defined $uid) {
+		error_hash($ret, $status, $error_text);
+	} else {
+		unless (4 == scalar grep { $_; } map { defined $obj->{$_}; } qw/key value priority display/) {
+			error_hash($ret, 3, "Must specify key, value, priority, display");
+		} else {
+			eval {
+				unless ($obj->{priority} =~ /$res{digitx1_plus}/) {
+					die_error_hash($ret, 4, "Priority must be a nonnegative number");
+					die;
+				}
+				my $display=($obj->{display}) ? 1 : 0;
+				
+				my @binds=($uid, @{$obj}{qw/key value priority/}, $display);
+				$binds[1]=lc $binds[1];
+				$connector->txn(fixup => sub {
+						my $dbh=$_;
+						my $queries=sub { query_get($_[0], $dbh); };
+
+						# Do we already have an entry?
+						$queries->('get_extdata_by_key')->execute(@binds[0,1]);
+						my @foo=fetchrow_array_single($queries->('get_extdata_by_key'));
+						if (scalar @foo) {
+							$queries->('delete_extdata_by_key')->execute(@binds[0,1]);
+						}
+						
+						$queries->('add_extdata')->execute(@binds);
+
+						$queries->('get_extdata_by_key')->execute(@binds[0,1]);
+						@foo=fetchrow_array_single($queries->('get_extdata_by_key'));
+						unless (scalar @foo) {
+							die_error_hash($ret, 5, "Failed to add extended data");
+						}
+					});
+				if ($@) {
+					if ('ARRAY' eq ref $@) {
+						# rethrow
+						die $@;
+					}
+					say STDERR $@;
+				}
+			}
+		}
+	}
+
+	unless ($ret->{status}) {
+		$ret->{status}=0;
+	}
+
+	return encode_json($ret);
+}
+
 my %query_types = (
 	authentication => \&authentication,
 	create_user => \&create_user,
 	user_info => \&user_info,
+	user_extinfo => \&user_extended_data,
+	add_extinfo => \&add_extended_data,
 );
 
 post '/query' => sub {
@@ -266,6 +384,8 @@ post '/query' => sub {
 		my $json=decode_json($params{query});
 		my $resp;
 		if (defined $query_types{$json->{query_type}}) {
+			log_it("info", $json->{query_type});
+			log_it("info", "$json");
 			$resp=$query_types{$json->{query_type}}->($json);
 		} else {
 			$resp="";
