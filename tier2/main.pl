@@ -5,6 +5,7 @@ use Mojo::JSON qw/decode_json encode_json/;
 use Digest;
 
 use lib('lib/');
+use experimental 'smartmatch';
 
 use DBIx::Connector;
 use DB::Password;
@@ -12,11 +13,19 @@ use Math::Random::Secure;
 
 use Mojo::Log;
 
+use MongoDB;
+
 my $connector=DBIx::Connector->new(
 	'dbi:mysql:tumbleweed',
 	'levi',
 	$DB::Password::mine,
 );
+
+app->attr(mongo => sub { (my $self) = @_;
+		my $client=MongoDB::MongoClient->new();
+		my $database=$client->get_database('tumbleweed');
+		return { client => $client, database => $database };
+	});
 
 app->config(hypnotoad => { listen => [ 'http://*:3001' ] });
 
@@ -68,6 +77,14 @@ sub crypt_password {
 		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
 		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
 		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
+		add_content => 'INSERT INTO content (poster,kind,posted,title) VALUES (?,?,NOW(),?)',
+		get_content_info_by_id => 'SELECT * FROM content WHERE id=?',
+		tag_content => 'INSERT INTO taggings (tag, target) VALUES (?,?)',
+		add_challenge => 'INSERT INTO challenges (id, expiration, global) VALUES (?,?,?)',
+		cnt_challenge_expiring => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration=? AND global=?',
+		cnt_challenge_noexpire => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration IS NULL AND global=?',
+		get_challenges => 'SELECT content.id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 ORDER BY posted DESC LIMIT ?,?',
+		get_challenge_by_id => 'SELECT poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND id=?'
 	);
 
 	my %queries;
@@ -382,12 +399,134 @@ sub add_extended_data { (my $obj) = @_;
 	return encode_json($ret);
 }
 
+sub add_content { (my $obj, my $c) = @_;
+	my $ret={ response_to => 'add_content' };
+
+	(my $uid, my $status, my $error_text) = user_id_or_name($obj->{uid}, $obj->{name});
+	
+	unless (defined $uid) {
+		error_hash($ret, $status, $error_text);
+	} else {
+		eval {
+			unless ((defined $obj->{type}) && (defined $obj->{title}) && ($obj->{title} !~ /^\s*$/)) {
+				die_error_hash($ret, 3, "Must specify a type and title");
+			}
+			my $type;
+			$obj->{type}=lc $obj->{type};
+			given ($obj->{type}) {
+				when ("challenge") {
+					$type=0;
+				}
+				when ("response") {
+					$type=1;
+				}
+				when ("comment") {
+					$type=2;
+				}
+				default {
+					die_error_hash($ret, 4, "Invalid type specified");
+				}
+			}
+			$connector->txn(fixup => sub {
+					my $dbh=$_;
+					my $queries=sub { query_get($_[0], $dbh); };
+					$queries->("add_content")->execute($uid, $type, $obj->{title});
+					my $content_id=$dbh->{mysql_insertid};
+					unless ((defined $content_id) &&
+						(do {
+								$queries->('get_content_info_by_id')->execute($content_id);
+								my @row=fetchrow_array_single($queries->('get_content_info_by_id'));
+								($row[1] == $uid) && ($row[2] == $type) && ($row[4] eq $obj->{title});
+						})) {
+						die_error_hash($ret, 5, "Failed to save content metadata");
+					}
+
+					if ((defined $obj->{tags}) && ('ARRAY' eq ref $obj->{tags})) {
+						for (@{$obj->{tags}}) {
+							$queries->('tag_content')->execute(lc $_, $content_id);
+						}
+					}
+
+					if (0 == $type) {
+						unless ((defined $obj->{expiration}) &&
+						        (('HASH' eq ref $obj->{expiration}) ||
+								 ('none' eq lc $obj->{expiration}))) {
+							die_error_hash($ret, 6, "Expiration required");
+						}
+						my $expiration;
+						if ('HASH' eq ref $obj->{expiration}) {
+							unless (6 == scalar grep { exists $obj->{expiration}->{$_}; } qw/year month day hours minutes/) {
+								die_error_hash($ret, 7, "expiration: Invalid date format");
+							}
+							$expiration=sprintf("%04d-%02d-%02d %02d:%02d:00", @{$obj->{expiration}}{qw/year month day hours minutes/});
+							log_it("info", $expiration);
+						} else {
+							$expiration=undef;
+						}
+
+						unless (defined $obj->{global}) {
+							die_error_hash($ret, 7, "Challenges must specify global[ity]");
+						}
+						my $global=($obj->{global}) ? 1 : 0;
+
+						$queries->('add_challenge')->execute($content_id, $expiration, $global);
+						my $cnt;
+						if (defined $expiration) {
+							$queries->('cnt_challenge_expiring')->execute($content_id, $expiration, $global);
+							($cnt)=fetchrow_array_single($queries->('cnt_challenge_expiring'));
+						} else {
+							$queries->('cnt_challenge_noexpire')->execute($content_id, $global);
+							($cnt)=fetchrow_array_single($queries->('cnt_challenge_noexpire'));
+						}
+						unless (1 == $cnt) {
+							die_error_hash($ret, 8, "Failed to create challenge");
+						}
+					}
+
+					if ((defined $obj->{content}) && ('HASH' eq ref $obj->{content})) {
+						my $mongo=$c->app->mongo;
+						my $mongocoll=$mongo->{database}->get_collection($obj->{type});
+						$obj->{content}->{_id}=$content_id;
+						$mongocoll->insert($obj->{content});
+					} else {
+						die_error_hash($ret, 9, "Must specify content as an object");
+					}
+					$ret->{id}=$content_id;
+				});
+			if ($@) {
+				if ('ARRAY' eq ref $@) {
+					die $@;
+				}
+				log_it("info", "Exception");
+				log_it("info", $@);
+			}
+		};
+		if ($@) {
+			unless ('ARRAY' eq ref $@) {
+				log_it("info", "Exception");
+				log_it("info", $@);
+			}
+		}
+	}
+
+	unless ($ret->{status}) {
+		$ret->{status}=0;
+	}
+
+	return encode_json($ret);
+}
+
+sub get_challenge { (my $obj, my $c) = @_;
+	my $ret={ response_to => 'get_challenge' };
+}
+
 my %query_types = (
 	authentication => \&authentication,
 	create_user => \&create_user,
 	user_info => \&user_info,
 	add_extinfo => \&add_extended_data,
 	user_extinfo => \&user_extended_data,
+	add_content => \&add_content,
 );
 
 post '/query' => sub {
@@ -399,7 +538,7 @@ post '/query' => sub {
 		if (defined $query_types{$json->{query_type}}) {
 			log_it("info", sprintf("%s %s", $self->tx->remote_address, $json->{query_type}));
 			log_it("info", $params{query});
-			$resp=$query_types{$json->{query_type}}->($json);
+			$resp=$query_types{$json->{query_type}}->($json, $self);
 		} else {
 			$resp="";
 		}
