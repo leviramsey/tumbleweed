@@ -227,12 +227,12 @@ sub create_user { (my $obj) = @_;
 					(my $pwhash, my $pwcost)=crypt_password($auth);
 					log_it("info", "$uid $pwhash");
 					$queries->('add_password')->execute($uid, $pwhash, $pwcost);
+				};
+				if ($@) {
+					log_it("info", "exception!");
+					log_it("info", $@);
 				}
 			});
-		if ($@) {
-			log_it("info", "exception!");
-			log_it("info", $@);
-		}
 	} else {
 		error_hash($ret, 6, 'Username, email, long name, date of birth, and authentication information required');
 	}
@@ -309,6 +309,9 @@ sub user_extended_data { (my $obj) = @_;
 				$queries->($query_name)->execute(@binds);
 				$ret->{results}=$queries->($query_name)->fetchall_arrayref;
 			});
+		if ($@) {
+			log_it("info", $@);
+		}
 	}
 
 	unless ($ret->{status}) {
@@ -379,8 +382,8 @@ my %query_types = (
 	authentication => \&authentication,
 	create_user => \&create_user,
 	user_info => \&user_info,
-	user_extinfo => \&user_extended_data,
 	add_extinfo => \&add_extended_data,
+	user_extinfo => \&user_extended_data,
 );
 
 post '/query' => sub {
