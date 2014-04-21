@@ -222,7 +222,7 @@ sub create_user { (my $obj) = @_;
 					unless (defined $uid) {
 						die_error_hash($ret, 5, 'Could not create user');
 					}
-					log_it("info", $@);
+					log_it("info", "fooey");
 
 					(my $pwhash, my $pwcost)=crypt_password($auth);
 					log_it("info", $@);
