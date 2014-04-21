@@ -21,7 +21,7 @@ my $connector=DBIx::Connector->new(
 app->config(hypnotoad => { listen => [ 'http://*:3001' ] });
 
 {
-	my @levels=qw/info warn error/;
+	my @levels=qw/info/;
 	my %logs=map { $_ => Mojo::Log->new(path => "/var/log/mojo/$_.log", level => "$_"); } @levels;
 
 	my %loggers;
@@ -384,8 +384,8 @@ post '/query' => sub {
 		my $json=decode_json($params{query});
 		my $resp;
 		if (defined $query_types{$json->{query_type}}) {
-			log_it("info", $json->{query_type});
-			log_it("info", "$json");
+			log_it("info", sprintf("%s %s", $self->tx->remote_address, $json->{query_type}));
+			log_it("info", $params{query});
 			$resp=$query_types{$json->{query_type}}->($json);
 		} else {
 			$resp="";
