@@ -186,7 +186,7 @@ sub create_user { (my $obj) = @_;
 	my $ret={ response_to => 'create_user' };
 
 	my @interested=@{$obj}{qw/user email auth long_name dob/};
-	if (scalar(@interested) == scalar grep { defined $_ } @interested) {
+	if (scalar(@interested) == scalar grep { (defined $_) && ($_); } @interested) {
 		(my $user, my $email, my $auth, my $long_name, my $dob) = @interested;
 		
 		$ret->{user}=$user;
@@ -222,7 +222,6 @@ sub create_user { (my $obj) = @_;
 					unless (defined $uid) {
 						die_error_hash($ret, 5, 'Could not create user');
 					}
-					log_it("info", "fooey");
 
 					(my $pwhash, my $pwcost)=crypt_password($auth);
 					log_it("info", "$uid $pwhash");
@@ -246,7 +245,7 @@ sub create_user { (my $obj) = @_;
 
 # Reserves error codes 1 and 2
 sub user_id_or_name { (my $uid, my $name) = @_;
-	if ((defined $uid) || (defined $name)) {
+	if (((defined $uid) && $uid) || ((defined $name) && $name)) {
 		unless (defined $uid) {
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
@@ -350,14 +349,12 @@ sub add_extended_data { (my $obj) = @_;
 						# Do we already have an entry?
 						$queries->('get_extdata_by_key')->execute(@binds[0,1]);
 						my @foo=fetchrow_array_single($queries->('get_extdata_by_key'));
-						log_it("info", "fooey");
 						if (scalar @foo) {
 							$queries->('delete_extdata_by_key')->execute(@binds[0,1]);
 							log_it("info", "deleted extdata key");
 						}
 						
 						$queries->('add_extdata')->execute(@binds);
-						log_it("info", $queries->('add_extdata')->err);
 
 						$queries->('get_extdata_by_key')->execute(@binds[0,1]);
 						@foo=fetchrow_array_single($queries->('get_extdata_by_key'));
@@ -372,7 +369,7 @@ sub add_extended_data { (my $obj) = @_;
 						# rethrow
 						die $@;
 					}
-					say STDERR $@;
+					log_it("info", $@);
 				}
 			}
 		}
