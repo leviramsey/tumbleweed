@@ -1,0 +1,122 @@
+body{
+	margin: 0;
+	padding: 0;
+	background-color: #ccc;
+	}
+.logo img{
+	padding: 25px;
+	float: right;
+	}
+.header-container{
+	position: relative;
+	height:85px;
+	background-color: #d3d3d3;
+	}
+.userbar-container{
+	width: 100%;
+	min-height:150px;
+	background-color: #666;
+	}
+.userbar-container img{
+	max-height: 100px;
+	}
+.userbar-picture-container img{
+	padding:10px;
+	padding-top: 25px;
+	}
+.userbar-username-container{
+	display: inline-block;
+	text-align: center;
+	float: left; 	
+ 	padding-top: 40px;
+	color: #cacaca;
+	font-family: 'Cabin', sans-serif;
+	font-size: 50px;
+}
+
+	
+#dark{
+	text-decoration: none;
+	color: #FFF;
+	}
+.userbar-break{
+	float:left;
+	width:100px;
+	}
+.userbar-picture-container{
+	float: left;
+	}
+.userbar-right-container{
+	color: #FFF;
+	text-align: center;
+	font-family: 'Cabin', sans-serif; 
+	font-size: 16px;
+	float: right;
+	margin-right: 10px;
+	margin-top: 5px;
+	padding: 3px;
+	background-color: #555;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	text-decoration:none;
+}
+.userbar-right-container:hover{
+	background-color: #222;
+}
+.challenge-feed-container{
+	background-color: #ccc;
+	height: 100%;
+	}
+.challenge-container{
+	margin-top: 10px;
+	padding: 10px;
+	height: 160px;
+	background-color: #ddd;
+}
+.user-container{
+	float: left;
+	text-align: center;
+	font-size: 26px;
+	font-family: 'Cabin', sans-serif; 
+	color:#000;
+	}
+.info-container{
+	float:left;
+	margin-left: 15px;
+	}
+#challenge-top-text{
+	font-size: 20px;
+	margin-top: 40px;
+	font-family: 'Cabin', sans-serif; 
+	color:#222222;
+}
+#challenge-main-text{
+	font-size: 36px;
+	font-family: 'Cabin', sans-serif; 
+	color:#222222;
+}
+#challenge-sub-text{
+	font-size: 20px;
+	font-family: 'Cabin', sans-serif; 
+	color:#222222;
+}
+#join-button{
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;	
+	padding: 5px;
+	background-color: #E0EEEE;
+}
+#join-button:hover{
+	background-color: #FFF;
+}
+#tags{
+	color: #38B0DE;
+	font-size: 20px;
+	font-family: 'Cabin', sans-serif; 
+	}
+.filler-container{
+	height:150px;
+	}
