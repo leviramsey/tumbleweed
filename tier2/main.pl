@@ -359,6 +359,7 @@ sub add_extended_data { (my $obj) = @_;
 
 						$queries->('get_extdata_by_key')->execute(@binds[0,1]);
 						@foo=fetchrow_array_single($queries->('get_extdata_by_key'));
+						log_it("info", join(" ", @foo));
 						unless (scalar @foo) {
 							die_error_hash($ret, 5, "Failed to add extended data");
 						}
