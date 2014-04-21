@@ -227,6 +227,9 @@ sub create_user { (my $obj) = @_;
 					$queries->('add_password')->execute($uid, $pwhash, $pwcost);
 				}
 			});
+		if ($@) {
+			log_it("info", $@);
+		}
 	} else {
 		error_hash($ret, 6, 'Username, email, long name, date of birth, and authentication information required');
 	}
