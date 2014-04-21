@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>CHALLENGE MOCK</title>
+<link rel="stylesheet" type="text/css" href="./stylesheets/create.css" media="all" />
+<link rel="stylesheet" type="text/css" href="./stylesheets/funkydori-web-stuff/funkydori.css" media="all" />
+<link href='http://fonts.googleapis.com/css?family=Cabin|PT+Sans' rel='stylesheet' type='text/css'>
+<link href='./stylesheets/animate.css' rel='stylesheet' type='text/css'>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+ <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+</head>
+<body>
+<div class="header-container"><div class="logo"><img src="/images/logo-sm.png"></div></div></div>
+<div class="challenge-creation-container-1"><br><div align="center"><div id="title-container-1"><h1>Challenge Creator</h1></div><br><div class="options-container-1"><img src="./images/icontrophy.png"><br><br><br><div id="begin-button">Begin</div></div></div><div class="progress-container"></div></div>
+<div class="challenge-creation-container-2"><br><div align="center"><div id="title-container-2"><h1>Challenge title?</h1></div><div class="options-container-2"><img src="./images/icontitle.png"><br><br><input type="text"></input><br></div></div><br><div class="progress-container"><div class="progress-radial progress-10"><div class="overlay">10%</div></div></div><span id="next-button-1"><img src="./images/iconnext.png"></span></div>
+<div class="challenge-creation-container-3"><br><div align="center"><div id="title-container-3"><h1>Describe it!</h1></div><div class="options-container-3"><img src="./images/icondescribe.png"><br><br><textarea rows="6" cols="50"></textarea></div></div><br><div class="progress-container"><div class="progress-radial progress-20"><div class="overlay">20%</div></div></div><span id="next-button-2"><img src="./images/iconnext.png"></span></div>
+<div class="challenge-creation-container-4"><br><div align="center"><div id="title-container-4"><h1>Who's Participating?</h1></div><div class="options-container-4"><div class="friends-container"><img src="./images/iconfriends.png"><br>Friends</div><div class="global-container"><img src="./images/iconglobe.png"><br>Global</div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-35"><div class="overlay">35%</div></div></div></div><br></div>
+<div class="challenge-creation-container-5"><br><div align="center"><div id="title-container-5"><h1>Upload an example!</h1></div><div class="options-container-5"><div class="photo-video-container"><div class="photo-container"><img src="./images/iconphoto.png"><br>Image</div><div class="video-container"><img src="./images/iconvideo.png"><br>Video</div></div><div class="music-text-container"><div class="sound-container"><img src="./images/iconmusic.png"><br>Sound</div><div class="text-container"><img src="./images/icontext.png"><br>Text</div></div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-25"><div class="overlay">25%</div></div></div></div><br><br></div>
+<div class="challenge-creation-container-6"><br><div align="center"><div id="title-container-6"><h1>How long should the challenge last?</h1></div><div class="options-container-6"><img src="./images/icontime.png"><br><br><div id="slider"></div><p><label for="amount"></label><input type="text" id="amount" style="border:0; color:#000; font-weight:bold; font-size:22px; text-align:center; background-color: transparent;"></p></div></div><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-3"><img src="./images/iconnext.png"></div>
+<div class="challenge-creation-container-7"><br><div align="center"><div id="title-container-7"><h1>Tag it!</h1></div><div class="options-container-7"><img src="./images/icontag.png"><br><br><input id="tags"></div></div><br><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-4"><img src="./images/iconnext.png"></div>
+<script>
+        
+$( document ).ready(function() {
+ 	$('h1').addClass('animated fadeInDown');
+ 	$('.options-container-1').hide();
+ 	$('.options-container-1').delay(1000).fadeIn();
+ 	$('.progress-container').hide();
+	$('.challenge-creation-container-2').hide();
+	$('.challenge-creation-container-3').hide();
+	$('.challenge-creation-container-4').hide();
+	$('.challenge-creation-container-5').hide();
+	$('.challenge-creation-container-6').hide();
+	$('.challenge-creation-container-7').hide();
+});
+
+$('#begin-button').click(function () {
+	$('.options-container-1').addClass('animated bounceOutRight');
+	$('#title-container-1').addClass('animated bounceOutRight');
+	$('.options-container-1').delay(200).fadeOut();
+	$('#title-container-1').delay(200).fadeOut();
+	$('.challenge-creation-container-1').hide();
+	$('.challenge-creation-container-2').show();
+	$('.progress-container').show();
+	$('.options-container-2').addClass('animated bounceInLeft');
+	$('#title-container-2').addClass('animated bounceInLeft');
+	
+});
+$('#next-button-1').click(function() {
+	$('.options-container-2').addClass('animated bounceOutRight');
+	$('#title-container-2').addClass('animated bounceOutRight');
+	$('.options-container-2').delay(200).fadeOut();
+	$('#title-container-2').delay(200).fadeOut();
+	$('.challenge-creation-container-2').hide();
+	$('.challenge-creation-container-3').show();
+	$('.options-container-3').addClass('animated bounceInLeft');
+	$('#title-container-3').addClass('animated bounceInLeft');
+});
+
+$('#next-button-2').click(function() {
+	$('.options-container-3').addClass('animated bounceOutRight');
+	$('#title-container-3').addClass('animated bounceOutRight');
+	$('.options-container-3').delay(200).fadeOut();
+	$('#title-container-3').delay(200).fadeOut();
+	$('.challenge-creation-container-3').hide();
+	$('.challenge-creation-container-4').show();
+	$('.options-container-4').addClass('animated bounceInLeft');
+	$('#title-container-4').addClass('animated bounceInLeft');
+});
+	
+$('.friends-container').click(function() {
+	$('.options-container-4').addClass('animated bounceOutRight');
+	$('#title-container-4').addClass('animated bounceOutRight');
+	$('.options-container-4').delay(200).fadeOut();
+	$('#title-container-4').delay(200).fadeOut();
+	$('.challenge-creation-container-4').hide();
+	$('.challenge-creation-container-5').show();
+	$('.options-container-5').addClass('animated bounceInLeft');
+	$('#title-container-5').addClass('animated bounceInLeft');
+});
+$('.global-container').click(function() {
+	$('.options-container-4').addClass('animated bounceOutRight');
+	$('#title-container-4').addClass('animated bounceOutRight');
+	$('.options-container-4').delay(200).fadeOut();
+	$('#title-container-4').delay(200).fadeOut();
+	$('.challenge-creation-container-4').hide();
+	$('.challenge-creation-container-5').show();
+	$('.options-container-5').addClass('animated bounceInLeft');
+	$('#title-container-5').addClass('animated bounceInLeft');
+});
+$('.photo-container').click(function() {
+	$('.options-container-5').addClass('animated bounceOutRight');
+	$('#title-container-5').addClass('animated bounceOutRight');
+	$('.options-container-5').delay(200).fadeOut();
+	$('#title-container-5').delay(200).fadeOut();
+	$('.challenge-creation-container-5').hide();
+	$('.challenge-creation-container-6').show();
+	$('.options-container-6').addClass('animated bounceInLeft');
+	$('#title-container-6').addClass('animated bounceInLeft');
+});
+$('#next-button-3').click(function() {
+	$('.options-container-6').addClass('animated bounceOutRight');
+	$('#title-container-6').addClass('animated bounceOutRight');
+	$('.options-container-6').delay(200).fadeOut();
+	$('#title-container-6').delay(200).fadeOut();
+	$('.challenge-creation-container-6').hide();
+	$('.challenge-creation-container-7').show();
+	$('.options-container-7').addClass('animated bounceInLeft');
+	$('#title-container-7').addClass('animated bounceInLeft');
+});
+
+ $(function() {
+var availableTags = [
+"#art",
+"#photography",
+"#coding",
+"#archery",
+"#video"
+];
+$( "#tags" ).autocomplete({
+	source: availableTags
+});
+});
+
+$('#tags').keypress(function (e) {
+  if (e.which == 13) {
+    $('#tags').html("no");
+  }
+});
+
+	 
+$(function() {
+$( "#slider" ).slider({
+	value:12,
+	min: 1,
+	max: 100,
+	step: 1,
+	slide: function( event, ui ) {
+	$( "#amount" ).val( ui.value  + " hours");
+	}
+});
+	$( "#amount" ).val( $( "#slider" ).slider( "value" ) + " hours");
+});
+
+	var scrollSpeed = 70;
+	var current = 0;
+	var direction = 'h';
+
+	function bgscroll(){
+	    current -= 1;
+	    $('div.challenge-creation-container-1').css("backgroundPosition", (direction == 'h') ? current+"px 0" : "0 " + current+"px");
+	}
+	
+	 setInterval("bgscroll()", scrollSpeed);	
+</script>
+</body>
+</html>
