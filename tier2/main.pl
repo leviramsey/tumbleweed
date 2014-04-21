@@ -346,11 +346,13 @@ sub add_extended_data { (my $obj) = @_;
 						my $dbh=$_;
 						my $queries=sub { query_get($_[0], $dbh); };
 
+						log_it("info", join(" ", @binds[0,1]));
 						# Do we already have an entry?
 						$queries->('get_extdata_by_key')->execute(@binds[0,1]);
 						my @foo=fetchrow_array_single($queries->('get_extdata_by_key'));
 						if (scalar @foo) {
 							$queries->('delete_extdata_by_key')->execute(@binds[0,1]);
+							log_it("info", "deleted extdata key");
 						}
 						
 						$queries->('add_extdata')->execute(@binds);
