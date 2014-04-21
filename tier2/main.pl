@@ -230,6 +230,7 @@ sub create_user { (my $obj) = @_;
 				}
 			});
 		if ($@) {
+			log_it("info", "exception!");
 			log_it("info", $@);
 		}
 	} else {
