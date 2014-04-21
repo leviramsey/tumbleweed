@@ -1,0 +1,100 @@
+body {
+	background-color: rgb(228, 228, 228);
+	text-shadow: -1px -1px gray;
+	margin: 0px;
+	padding: 0px;
+}
+
+h1.title {
+	font-family: 'Cabin', sans-serif;
+	text-shadow: 0px;
+	font-size: 123px;
+	margin: 0px;
+}
+
+td#signup-title {
+	text-align: center;
+}
+
+td#login-title {
+	text-align: center;
+}
+
+div#header {
+	background: #3e83c8 url(../images/clouds.png) repeat-x; bottom;
+	color: white;
+	text-align: center;
+	padding: 30px;
+	height:200px;
+}
+
+div.error {
+	display: inline-block;
+	padding: 10px;
+	border: 1px solid red;
+	border-radius: 5px;
+	background-color: Pink;
+}
+
+div#title-wrap {
+	width: 700px;
+	padding-top: 40px;
+	margin: 0px auto;
+	text-align: center;
+}
+
+div#route-wrap{
+	padding-top: 30px;
+}
+a.cabinl {
+	font-family: 'Cabin';
+	background: rgba(176, 224, 230, 0.5);
+	padding: 8px;
+	border: 1px solid white;
+	border-radius: 15px;
+	color: white;
+	text-decoration: none;
+	font-size: 24px;
+}
+ 
+
+a.cabinl:hover {
+	font-family: 'Cabin';
+	background: rgba(176, 224, 230, 0.75);
+	padding: 8px;
+	border: 1px solid white;
+	border-radius: 15px;
+	color: white;
+	text-decoration: none;
+	font-size: 24px;
+}
+
+div#content {
+	width: 450px;
+	margin: 0px auto;
+	text-align: center;
+}
+
+.finput {
+	font-family: 'Cabin';
+	font-size: 18px;
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 15px;
+}
+
+.finn {
+	display: inline-block;
+	width: 120px;
+	font-family: 'Cabin';
+	font-size: 22px;
+	font-weight: 100;
+}
+
+h2.fancy {
+	font-family: 'Lobster Two',cursive;
+	font-weight: 100;
+	font-size: 45px;
+	line-height: 80%;
+	margin: 30px 0px;
+}
