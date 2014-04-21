@@ -518,6 +518,8 @@ sub add_content { (my $obj, my $c) = @_;
 
 sub get_challenge { (my $obj, my $c) = @_;
 	my $ret={ response_to => 'get_challenge' };
+
+	
 }
 
 my %query_types = (
