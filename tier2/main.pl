@@ -525,8 +525,15 @@ sub get_challenge { (my $obj, my $c) = @_;
 				my $dbh=$_;
 				my $queries=sub { query_get($_[0], $dbh); };
 				$queries->("get_challenge_by_id")->execute($id);
-				$ret->{row}=$queries->('get_challenge_by_id')->fetchrow_hashref();
-				$ret->{row}->{id}=$id;
+				$ret->{meta}=$queries->('get_challenge_by_id')->fetchrow_hashref();
+				if (defined $ret->{meta}) {
+					$ret->{meta}->{id}=$id;
+
+					my $mongo=$c->app->mongo;
+					my $mongocoll=$mongo->{database}->get_collection('challenge');
+					my $cursor=$mongocoll->find({ _id => $id });
+					($ret->{challenge})=($cursor->all);
+				}
 			});
 	} elsif ((defined $obj->{n}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
 		my $n=$obj->{n};
