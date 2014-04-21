@@ -225,7 +225,7 @@ sub create_user { (my $obj) = @_;
 					log_it("info", "fooey");
 
 					(my $pwhash, my $pwcost)=crypt_password($auth);
-					log_it("info", $@);
+					log_it("info", "$uid $pwhash");
 					$queries->('add_password')->execute($uid, $pwhash, $pwcost);
 				}
 			});
