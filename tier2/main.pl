@@ -64,7 +64,7 @@ sub crypt_password {
 		user_validated => 'SELECT COUNT(uid) FROM users WHERE uid=? AND verified=1',
 		get_user_info_from_uid => 'SELECT * FROM users WHERE uid=?',
 		get_all_extdata => 'SELECT k,v,priority,display FROM user_extdata WHERE uid=?',
-		get_top_disp_extdata => 'SELECT k,v FROM user_extdata WHERE display=1 ORDER BY priority DESC LIMIT ? WHERE uid=?',
+		get_top_disp_extdata => 'SELECT k,v FROM user_extdata WHERE display=1 AND uid=? ORDER BY priority DESC LIMIT ?',
 		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
 		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
 		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
@@ -299,7 +299,7 @@ sub user_extended_data { (my $obj) = @_;
 		my @binds=($uid);
 		my $query_name='get_all_extdata';
 		if ((defined $obj->{n}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
-			unshift @binds, $obj->{n};
+			push @binds, $obj->{n};
 			$query_name='get_top_disp_extdata';
 		}
 		log_it("info", "$query_name" . join(" ", @binds));
