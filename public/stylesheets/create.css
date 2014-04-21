@@ -1,0 +1,355 @@
+body{
+	background-color: #67d382;
+	}
+.logo img{
+	padding: 25px;
+	float: right;
+	}
+input{
+	height: 50px;
+	width: 500px;
+	font-size: 25px;
+	    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+	}
+textarea {
+font-family: 'PT Sans', sans-serif;
+font-size: 18px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.header-container{
+	position: relative;
+	height:85px;
+	background-color: #d3d3d3;
+	}
+.challenge-creation-container-1{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	color: #3a3a3a;
+	background:#3e83c8 url(../images/clouds.jpg) repeat 0 bottom;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-1 h1{
+	font-family: 'funkydori', sans-serif;
+	text-shadow: white 1px 1px;
+	font-size: 65px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+.challenge-creation-container-2{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #DDA0DD;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-2 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+.challenge-creation-container-3{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #668e9e;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-3 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+.challenge-creation-container-4{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #ff505c;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-4 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+.challenge-creation-container-5{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #67d382;
+	width:100%;
+	}
+.challenge-creation-container-5 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+.challenge-creation-container-6{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #EEEB8D;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-6 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+.challenge-creation-container-7{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #E79EA9;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-7 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
+body{
+	margin:0px;
+	padding: 0;
+}
+.friends-container{
+	padding: 2px;
+	float:left;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.friends-container:hover{
+	background-color:rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+.global-container{
+	padding: 2px;
+	float:right;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.global-container:hover{
+	background-color:rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+
+.options-container-4{
+	width:325px;
+}
+.options-container-5{
+	width:714px;
+}
+.photo-video-container{
+	width:325px;
+	float:left;
+}
+.music-text-container{
+	width:325px;
+	float:right;
+}
+#begin-button{
+	width:100px;
+	background-color: #CCC;
+	webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+	}
+.photo-container{
+	float:left;
+	padding: 2px;
+	webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.photo-container:hover{
+	background-color:rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.video-container{
+	float:right;
+	padding: 2px;
+	webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.video-container:hover{
+	background-color:rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.sound-container{
+	float:left;
+	padding: 2px;
+	webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.sound-container:hover{
+	background-color:rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.text-container{
+	float:right;
+	padding: 2px;
+	webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.text-container:hover{
+	background-color:rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 	10px;
+	border-radius: 10px;
+}
+.progress-container{
+	width: 100px;
+	margin: 0px auto;
+	text-align: center;
+}
+/* -------------------------------------
+ * Bar container
+ * ------------------------------------- */
+.progress-radial {
+  float: left;
+  margin-right: 30px;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: tomato;
+}
+
+/* -------------------------------------
+ * Optional centered circle w/text
+ * ------------------------------------- */
+.progress-radial .overlay {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-color: #fffde8;
+  border-radius: 50%;
+  margin-left: 20px;
+  margin-top: 20px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 16px;
+}
+
+/* -------------------------------------
+ * Mixin for progress-% class
+ * ------------------------------------- */
+
+
+.progress-5 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(108deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-10 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(126deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-15 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(144deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-20 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(162deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-25 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(180deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-30 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(198deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-35 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(216deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-40 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(234deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-45 {
+  background-image: linear-gradient(90deg, #2f3439 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(252deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-50 {
+  background-image: linear-gradient(-90deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-55 {
+  background-image: linear-gradient(-72deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-60 {
+  background-image: linear-gradient(-54deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-65 {
+  background-image: linear-gradient(-36deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-70 {
+  background-image: linear-gradient(-18deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-75 {
+  background-image: linear-gradient(0deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-80 {
+  background-image: linear-gradient(18deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-85 {
+  background-image: linear-gradient(36deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-90 {
+  background-image: linear-gradient(54deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-95 {
+  background-image: linear-gradient(72deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
+
+.progress-100 {
+  background-image: linear-gradient(90deg, #ff6347 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0)), linear-gradient(270deg, #ff6347 50%, #2f3439 50%, #2f3439);
+}
