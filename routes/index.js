@@ -27,6 +27,18 @@ exports.feed = function(req, res) {
 	}
 }
 
+exports.challenge = function(req, res) {
+
+	if(req.session.user) {
+		res.render('create', {
+			title: 'Create a challenge'
+		});
+	}
+	else {
+		res.redirect('/');
+	}
+}
+
 exports.register = function(req, res) {
 
 	if (!req.body.user || !req.body.pass || !req.body.email || !req.body.long_name || !req.body.day || !req.body.month || !req.body.year) {
@@ -84,5 +96,17 @@ exports.logout = function(req, res) {
 		req.session.destroy(function() {
 			res.redirect('/');
 		});
+	}
+}
+
+exports.create = function(req, res) {
+	if(!req.session.user) {
+		res.redirect('/');
+	}
+	else {
+		
+		
+		
+		
 	}
 }

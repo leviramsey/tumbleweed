@@ -37,6 +37,7 @@ var routes = require('./routes');
 app.get('/', routes.index);
 app.get('/feed', routes.feed);
 app.get('/logout', routes.logout);
+app.get('/challenge', routes.challenge);
 app.post('/register', routes.register);
 app.post('/login', routes.login);
 
