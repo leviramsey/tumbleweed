@@ -65,7 +65,7 @@ sub crypt_password {
 		get_user_info_from_uid => 'SELECT * FROM users WHERE uid=?',
 		get_all_extdata => 'SELECT k,v,priority,display FROM user_extdata WHERE uid=?',
 		get_top_disp_extdata => 'SELECT k,v FROM user_extdata WHERE display=1 AND uid=? ORDER BY priority DESC LIMIT ?',
-		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
+		add_extdata => 'INSERT INTO user_extdata VALUES (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
 		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
 		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
 	);
