@@ -302,6 +302,7 @@ sub user_extended_data { (my $obj) = @_;
 			unshift @binds, $obj->{n};
 			$query_name='get_top_disp_extdata';
 		}
+		log_it("info", "$query_name" . join(" ", @binds));
 
 		$connector->txn(fixup => sub {
 				my $dbh=$_;
