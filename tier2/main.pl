@@ -83,8 +83,8 @@ sub crypt_password {
 		add_challenge => 'INSERT INTO challenges (id, expiration, global) VALUES (?,?,?)',
 		cnt_challenge_expiring => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration=? AND global=?',
 		cnt_challenge_noexpire => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration IS NULL AND global=?',
-		get_challenges => 'SELECT content.id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 ORDER BY posted DESC LIMIT ?,?',
-		get_challenge_by_id => 'SELECT poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND id=?'
+		get_challenges => 'SELECT content.id AS id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 ORDER BY posted DESC LIMIT ?,?',
+		get_challenge_by_id => 'SELECT poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND content.id=?'
 	);
 
 	my %queries;
@@ -519,7 +519,48 @@ sub add_content { (my $obj, my $c) = @_;
 sub get_challenge { (my $obj, my $c) = @_;
 	my $ret={ response_to => 'get_challenge' };
 
-	
+	if ((defined $obj->{id}) && ($obj->{id} =~ /$res{digitx1_plus}/)) {
+		my $id=$obj->{id};
+		$connector->txn(fixup => sub {
+				my $dbh=$_;
+				my $queries=sub { query_get($_[0], $dbh); };
+				$queries->("get_challenge_by_id")->execute($id);
+				$ret->{meta}=$queries->('get_challenge_by_id')->fetchrow_hashref();
+				if (defined $ret->{meta}) {
+					$ret->{meta}->{id}=$id;
+
+					my $mongo=$c->app->mongo;
+					my $mongocoll=$mongo->{database}->get_collection('challenge');
+					my $cursor=$mongocoll->find({ _id => $id });
+					($ret->{challenge})=($cursor->all);
+				}
+			});
+	} elsif ((defined $obj->{n}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
+		my $n=$obj->{n};
+		my $start=0;
+		if ((defined $obj->{start}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
+			$start=$obj->{start};
+		}
+		$connector->txn(fixup => sub {
+				my $dbh=$_;
+				my $queries=sub { query_get($_[0], $dbh); };
+				$queries->("get_challenges")->execute($start, $n);
+				my @challenges;
+				while (defined(my $row=$queries->('get_challenges')->fetchrow_hashref())) {
+					push @challenges, $row;
+				}
+				$ret->{challenges}=\@challenges;
+			});
+	} else {
+		log_it("info", "fooey!");
+		error_hash($ret, 1, "Must specify either a challenge ID or a number of challenges to retrieve (and optionally a starting position)");
+	}
+
+	unless ($ret->{status}) {
+		$ret->{status}=0;
+	}
+
+	return encode_json($ret);
 }
 
 my %query_types = (
@@ -529,19 +570,22 @@ my %query_types = (
 	add_extinfo => \&add_extended_data,
 	user_extinfo => \&user_extended_data,
 	add_content => \&add_content,
+	get_challenge => \&get_challenge,
 );
 
 post '/query' => sub {
 	(my $self) = @_;
 	my %params=%{$self->req->params->to_hash};
+	say keys %params;
 	if (defined $params{query}) {
 		my $json=decode_json($params{query});
 		my $resp;
+		log_it("info", sprintf("%s %s", $self->tx->remote_address, $json->{query_type}));
 		if (defined $query_types{$json->{query_type}}) {
-			log_it("info", sprintf("%s %s", $self->tx->remote_address, $json->{query_type}));
 			log_it("info", $params{query});
 			$resp=$query_types{$json->{query_type}}->($json, $self);
 		} else {
+			log_it("info", $json->{query_type});
 			$resp="";
 		}
 		return $self->render(data => $resp);
