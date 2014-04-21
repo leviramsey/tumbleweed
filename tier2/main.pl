@@ -364,6 +364,7 @@ sub add_extended_data { (my $obj) = @_;
 						}
 					});
 				if ($@) {
+					log_it("info", "exception!");
 					if ('ARRAY' eq ref $@) {
 						# rethrow
 						die $@;
