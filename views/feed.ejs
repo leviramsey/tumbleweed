@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="./stylesheets/tumblefeed.css" media="all" />
 <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Cabin|PT+Sans' rel='stylesheet' type='text/css'>
+<link href='./stylesheets/animate.css' rel='stylesheet' type='text/css'>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -35,8 +36,120 @@ $(function() {
     $(window).scroll(function() {
          sticky_navigation();
     });
+
+	pushFeed();
+	setInterval('pushFeed()', 6000);
  
-});</script>
+});
+
+	var names = new Array(
+		'jaredo',
+		'starlene',
+		'sunfl0wer',
+		'kello',
+		'hara',
+		'jem',
+		'wobo',
+		'byna',
+		'pando',
+		'paul',
+		'ehul',
+		'ishlin',
+		'magicMike',
+		'reggie',
+		'wilson'
+	);
+
+	var images = new Array(
+		'./images/iconfemale1.png',
+		'./images/iconfemale2.png',
+		'./images/iconmale1.png',
+		'./images/iconalan.png'
+	);
+
+	var mediaz = new Array(
+		'Image', 'Video', 'Sound', 'Text'	
+	);
+
+	var challenges = new Array(
+		'Ask a stranger to tell you their life story and write it down!',
+		'Drive as far as you can in one direction!',
+		'Draw a picture with your eyes closed!'
+	);
+
+	function pushFeed() {
+		var locale = (Math.random() < 0.5? 'Friends only' : 'Global');
+		var name = names[Math.floor(Math.random() * names.length)];
+		var image = images[Math.floor(Math.random() * images.length)];
+		var hrs = Math.floor(48 * Math.random()) + 1;
+		var N = Math.floor(20 * Math.random()) + 1;
+		var media = mediaz[Math.floor(Math.random() * mediaz.length)];
+		var challenge = challenges[Math.floor(Math.random() * challenges.length)];
+		var html = '<div class="animated fadeIn challenge-container">' +
+			'<div class="user-container">' +
+			'<img src="' + image + '"><br>' + name + '</div>' +
+			'<div class="info-container">' +
+			'<br><span id="challenge-top-text">' +
+			'Time Remaining: ' + hrs + ' hours /' +
+			'Difficulty: ' + stars() + '/' +
+			locale + '</span>' +
+			'<br><span id="challenge-main-text">' + challenge + '</span>' +
+			'<br><span id="challenge-sub-text">' +
+			N + ' participants /' +
+			'View Example (' + media + ') /' +
+			'<span id="join-button">Join!</span></span>' +
+			'<br><span id="tags">#travel #video #photography</span>' +
+			'</div>' +
+			'</div>';
+		$('#cfc').prepend(html);
+	}
+
+	function stars() {
+		var stars = '&#9733';
+		var twinkle = true;
+		for (var i=0; i < 4; i++) {
+			if(Math.random() > 0.7) {
+				twinkle = false;			
+			}
+			if(twinkle) {
+				stars += '&#9733';			
+			}
+			else {
+				stars += '&#9734';		
+			}
+		}
+		return stars;
+	}
+
+/*
+challenge feed spec:
+
+<div class="challenge-container">
+	<div class="user-container">
+		<img src="--------"><br>--------
+	</div>
+	<div class="info-container">
+		<br><span id="challenge-top-text">
+			Time Remaining: ------------ /
+			Difficulty: ------ /
+			---------
+		</span>
+		<br><span id="challenge-main-text">
+			.....................................
+		</span>
+		<br><span id="challenge-sub-text">
+			---- participants /
+			View Example (-------) /
+			<span id="join-button">Join!</span>
+		</span>
+		<br><span id="tags">-------</span>
+	</div>
+</div>
+
+
+*/
+
+</script>
 </head>
 <body>
 <div class="header-container"><div class="logo"><img src="./images/logo-sm.png"></div></div>
@@ -48,15 +161,8 @@ $(function() {
 	<a href='/challenge' class="userbar-right-container"><img src="./images/icontitle.png"><br>Create A Challenge</a>
 </div>
 <div class="filler-container">.</div>
-<div class="challenge-feed-container">
-<div class="challenge-container"><div class="user-container"><img src="./images/iconfemale2.png"><br>starlene</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 8 days /  Difficulty: &#9733&#9733&#9733&#9733&#9734 / Friends Only</span><br><span id="challenge-main-text">Ask a stranger to tell you their life story and write it down!</span><br><span id="challenge-sub-text">2 participants / View Example (text) / <span id="join-button">Join!</span></span><br><span id="tags">#writing #text</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconmale1.png"><br>buckeroo</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 13 hours /  Difficulty: &#9733&#9733&#9733&#9734&#9734 / Friends Only</span><br><span id="challenge-main-text">Drive as far as you can in one direction!</span><br><span id="challenge-sub-text">13 participants / View Example (video) / <span id="join-button">Join!</span></span><br><span id="tags">#travel #video #photography</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconfemale1.png"><br>sunfl0wer</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 3 days /  Difficulty: &#9733&#9734&#9734&#9734&#9734 / Global</span><br><span id="challenge-main-text">Draw a picture with your eyes closed!</span><br><span id="challenge-sub-text">2 participants / View Example (image) / <span id="join-button">Join!</span></span><br><span id="tags">#art #drawing</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconfemale2.png"><br>starlene</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 8 days /  Difficulty: &#9733&#9733&#9733&#9733&#9734 / Friends Only</span><br><span id="challenge-main-text">Ask a stranger to tell you their life story and write it down!</span><br><span id="challenge-sub-text">2 participants / View Example (text) / <span id="join-button">Join!</span></span><br><span id="tags">#writing #text</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconmale1.png"><br>buckeroo</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 13 hours /  Difficulty: &#9733&#9733&#9733&#9734&#9734 / Friends Only</span><br><span id="challenge-main-text">Drive as far as you can in one direction!</span><br><span id="challenge-sub-text">13 participants / View Example (video) / <span id="join-button">Join!</span></span><br><span id="tags">#travel #video #photography</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconfemale1.png"><br>sunfl0wer</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 3 days /  Difficulty: &#9733&#9734&#9734&#9734&#9734 / Global</span><br><span id="challenge-main-text">Draw a picture with your eyes closed!</span><br><span id="challenge-sub-text">2 participants / View Example (image) / <span id="join-button">Join!</span></span><br><span id="tags">#art #drawing</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconfemale2.png"><br>starlene</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 8 days /  Difficulty: &#9733&#9733&#9733&#9733&#9734 / Friends Only</span><br><span id="challenge-main-text">Ask a stranger to tell you their life story and write it down!</span><br><span id="challenge-sub-text">2 participants / View Example (text) / <span id="join-button">Join!</span></span><br><span id="tags">#writing #text</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconmale1.png"><br>buckeroo</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 13 hours /  Difficulty: &#9733&#9733&#9733&#9734&#9734 / Friends Only</span><br><span id="challenge-main-text">Drive as far as you can in one direction!</span><br><span id="challenge-sub-text">13 participants / View Example (video) / <span id="join-button">Join!</span></span><br><span id="tags">#travel #video #photography</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./images/iconfemale1.png"><br>sunfl0wer</div><div class="info-container"><br><span id="challenge-top-text">Time Remaining: 3 days /  Difficulty: &#9733&#9734&#9734&#9734&#9734 / Global</span><br><span id="challenge-main-text">Draw a picture with your eyes closed!</span><br><span id="challenge-sub-text">2 participants / View Example (image) / <span id="join-button">Join!</span></span><br><span id="tags">#art #drawing</span></div></div></div>
+<div id='cfc' class="challenge-feed-container">
+
+</div>
 </body>
 </html>
