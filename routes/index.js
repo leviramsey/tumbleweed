@@ -7,21 +7,17 @@ exports.index = function(req, res) {
 	}
 	else {
 		res.render('index', {
-			title: 'Tumbleweed',
 			registererr: req.flash('register'),
 			loginerr: req.flash('login')
 		});
 	}
 }
-
 exports.settings = function(req, res) {
-
 	if(req.session.user) {
 		res.render('settings', {
 			title: 'Settings'
 		});
-	}
-	else {
+	} else {
 		res.redirect('/');
 	}
 }
@@ -138,7 +134,7 @@ exports.create = function(req, res) {
 }
 
 exports.view_challenge = function(req, res) {
-	if (!(req.body.id)) {
+	if (!(req.query.id)) {
 		res.redirect('/feed');
 	}
 
@@ -146,18 +142,21 @@ exports.view_challenge = function(req, res) {
 	Query.Challenge.get(
 			id,
 			function (response, body) {
-				if (body) {
-					if (0 == body.status) {
-						var poster=body.meta.poster;
-						var name="";
-						Query.User.info(poster,
-							function (row) {	name=row.name;	}, true);
+				if (body && (0 == body.status)) {
+					var poster=body.meta.poster;
+					Query.User.info(poster,
+						function (row) {
+							name=row.name;
 
 						res.render('challenge', {
-							// TODO
-						});
-					}
+							title: body.meta.title,
+							name: name,
+							visibility: (body.meta.global ? "Everyone" : "Friends only"),
+							description: body.challenge.description
+						};}, true);
+					});
 				} else {
+					console.log(body);
 					res.redirect('/');
 				}
 			});
