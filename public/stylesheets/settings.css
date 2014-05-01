@@ -100,7 +100,27 @@ body{
 	
 	height:250px;
 }
-	
+#panel-2-container{
+	text-align: left;
+	width: 85%;
+	padding: 10px;
+	background-color: #b1b1b1;
+	font-family: 'Cabin', sans-serif; 
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+#panel-2-inner-container{
+	font-size: 32px;
+	height:150px;
+}	
+#panel-2-inner-container input{
+	margin-left: 50px;	
+	font-size: 32px;
+		-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}	
 #current-icon-container{
 	float: left;
 	margin-left: 10px;
@@ -163,7 +183,29 @@ body{
 #vertical-divider-container{
 	margin-left: 20px;
 	float:left;
-}
+	}
 #blank-horizontal-divider{
 	height:35px;
 	}
+#required{
+	text-decoration: strong;
+	color:red;
+	}
+#change-password-container{
+	width:950px;
+	}
+#change-password-label-container{
+	float: left;
+	text-align: right;	
+	}
+#change-password-input-container{
+	float: right;
+	text-align: left;
+	}
+.button-confirm {
+   font-family: 'Open Sans', sans-serif !important;
+   color: white !important;       
+   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2) !important;
+   background: rgb(28, 184, 65) !important;
+ 	}
+
