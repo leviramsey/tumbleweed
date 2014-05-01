@@ -116,7 +116,7 @@ body{
 	border-radius: 5px;
 	}
 #upload-button-container{
-	float:left;
+	float:right;
 	text-align: center;
 	font-family: 'Cabin', sans-serif; 
 	font-size: 32px;
@@ -131,11 +131,27 @@ body{
 	height: 50px;	
 }
 #or-container{
+	float:right;
 	text-align: center;
 	margin-top: 50;
-   color: #343434;
+   color: #FFF;
    font-family: 'funkydori', sans-serif;
+   	text-shadow: black 2px 2px;
 	font-size: 70px;
 	width:50px;
-	float: left;
 }
+.default-icons-container{
+	float: right;
+	width: 600px;
+	}
+.default-icon-1-container{
+	float: left;
+	width:175px;
+	background-color: #FFF;
+	}
+.default-icon-2-container{
+	float: right;
+	width:175px;
+	background-color: #FFF;
+	}
+
