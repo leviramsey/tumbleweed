@@ -129,7 +129,7 @@ $('#next-button-3').click(function() {
 		var now = new Date();
 		var timeAmount = $('#amount').val();
 		var timeLater = new Date(now.getTime() + (timeAmount*1000*60*60));
-			window.alert(timeLater);
+		$('#duration').val(timeLater);
 });
 
 $('#next-button-4').click(function() {
@@ -166,7 +166,7 @@ $('#tags').keypress(function (e) {
 	 
 $(function() {
 $( "#slider" ).slider({
-	value:12,
+	value: 12,
 	min: 1,
 	max: 100,
 	step: 1,
