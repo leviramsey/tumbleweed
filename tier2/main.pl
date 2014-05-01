@@ -412,7 +412,7 @@ sub add_content { (my $obj, my $c) = @_;
 			        (defined $obj->{title}) && 
 					($obj->{title} !~ /^\s*$/) && 
 					(defined $obj->{visibility}) && 
-				    ($obj->{visibility} =~ /^[12]$/)) {
+				    ($obj->{visibility} =~ /^[01]$/)) {
 				die_error_hash($ret, 3, "Must specify a type, title, and visibility");
 			}
 			my $type;
