@@ -7,7 +7,6 @@ exports.index = function(req, res) {
 	}
 	else {
 		res.render('index', {
-			title: 'Tubmleweed',
 			registererr: req.flash('register'),
 			loginerr: req.flash('login')
 		});
@@ -107,7 +106,6 @@ exports.create = function(req, res) {
 		var body=req.body;
 		var content={ description: body.description };
 		var tags=body.tags.split(/\s+/);
-		console.log(body);
 		Query.Challenge.create(req.session.user.name,
 				               body.title,
 							   body.locale,
@@ -115,7 +113,26 @@ exports.create = function(req, res) {
 							   JSON.parse(body.duration),
 							   content,
 			function(response, body) {
-				console.log(body);
+				if (body) {
+					var id=body.id;
+					res.redirect('/challenge?id='+id);
+				} else {
+					// Something fscked up...
+					res.redirect('/');
+				}
 			});
 	}
+}
+
+exports.view_challenge = function(req, res) {
+	if (!(req.body.id)) {
+		res.redirect('/feed');
+	}
+
+	var id=req.query.id;
+	Query.Challenge.get(
+			id,
+			function (response, body) {
+				console.log(body);
+			});
 }

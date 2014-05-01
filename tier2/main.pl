@@ -80,6 +80,7 @@ sub crypt_password {
 		add_content => 'INSERT INTO content (poster,kind,posted,title) VALUES (?,?,NOW(),?)',
 		get_content_info_by_id => 'SELECT * FROM content WHERE id=?',
 		tag_content => 'INSERT INTO taggings (tag, target) VALUES (?,?)',
+		get_tags => 'SELECT tag FROM taggings WHERE target=?',
 		add_challenge => 'INSERT INTO challenges (id, expiration, global) VALUES (?,?,?)',
 		cnt_challenge_expiring => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration=? AND global=?',
 		cnt_challenge_noexpire => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration IS NULL AND global=?',
@@ -530,6 +531,15 @@ sub get_challenge { (my $obj, my $c) = @_;
 				$ret->{meta}=$queries->('get_challenge_by_id')->fetchrow_hashref();
 				if (defined $ret->{meta}) {
 					$ret->{meta}->{id}=$id;
+
+					$queries->('get_tags')->execute($id);
+					my @tags;
+					while (defined (my $tag=$queries->('get_tags')->fetchrow_arrayref())) {
+						push @tags, $tag->[0];
+					}
+					if (scalar @tags) {
+						$ret->{meta}->{tags}=\@tags;
+					}
 
 					my $mongo=$c->app->mongo;
 					my $mongocoll=$mongo->{database}->get_collection('challenge');
