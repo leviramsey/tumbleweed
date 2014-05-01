@@ -97,14 +97,14 @@ body{
 	border-radius: 10px;
 }
 #panel-1-inner-container{
-	height:300px;
+	height:250px;
 }
 	
 #current-icon-container{
 	float: left;
 	margin-left: 10px;
 	margin-right: 10px;
-	margin-top: 50px; 
+	margin-top: 25px; 
 	padding: 15px;
 	text-align: center;
 	width: 175px;
@@ -119,12 +119,23 @@ body{
 	float:left;
 	text-align: center;
 	font-family: 'Cabin', sans-serif; 
-	font-size: 24px;
-	margin-top: 125px;
+	font-size: 32px;
+	margin-top: 35px;
 	width: 400px;
 	}
+
 #upload-button-container input.upload{
 	font-family: 'Cabin', sans-serif; 
+	margin-top: 5px;
 	font-size: 18px;
 	height: 50px;	
+}
+#or-container{
+	text-align: center;
+	margin-top: 50;
+   color: #343434;
+   font-family: 'funkydori', sans-serif;
+	font-size: 70px;
+	width:50px;
+	float: left;
 }
