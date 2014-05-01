@@ -113,7 +113,7 @@ my %res=(
 sub sql_datetime_to_object { (my $sqldt) = @_;
 	(my $year, my $month, my $day, my $hours, my $minutes) = ($sqldt =~ /$res{datetime_format}/);
 
-	return { year: $year, month: $month, day: $day, hours: $hours, minutes: $minutes };
+	return { year => $year, month => $month, day => $day, hours => $hours, minutes => $minutes };
 }
 
 sub error_hash { (my $href, my $status, my $desc) = @_;
