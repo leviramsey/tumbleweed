@@ -16,6 +16,7 @@ body{
 	width: 100%;
 	min-height:150px;
 	background-color: #666;
+	z-index: 13;
 	}
 .userbar-container img{
 	max-height: 100px;
