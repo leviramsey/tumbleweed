@@ -107,7 +107,14 @@ my %res=(
 	digitx4 => qr/^\d{4}$/,
 	digitx2 => qr/^\d{2}$/,
 	digitx1_plus => qr/^\d+$/,
+	datetime_format => qr/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/,
 );
+
+sub sql_datetime_to_object { (my $sqldt) = @_;
+	(my $year, my $month, my $day, my $hours, my $minutes) = ($sqldt =~ /$res{datetime_format}/)
+
+	return { year: $year, month: $month, day: $day, hours: $hours, minutes: $minutes };
+}
 
 sub error_hash { (my $href, my $status, my $desc) = @_;
 	return unless ((ref $href) eq 'HASH');
@@ -539,6 +546,10 @@ sub get_challenge { (my $obj, my $c) = @_;
 					}
 					if (scalar @tags) {
 						$ret->{meta}->{tags}=\@tags;
+					}
+
+					for my $key (qw/posted expiration/) {
+						$ret->{meta}->{$key}=sql_datetime_to_object($ret->{meta}->{$key}) if defined $ret->{meta}->{$key};
 					}
 
 					my $mongo=$c->app->mongo;

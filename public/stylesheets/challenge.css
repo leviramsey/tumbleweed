@@ -1,5 +1,5 @@
-@import tumblefeed.css;
+@import url(tumblefeed.css);
 
- challenge-container{
+.challenge-container{
  	height: 400px !important;
  	}

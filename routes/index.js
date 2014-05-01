@@ -148,13 +148,13 @@ exports.view_challenge = function(req, res) {
 						function (row) {
 							name=row.name;
 
-						res.render('challenge', {
-							title: body.meta.title,
-							name: name,
-							visibility: (body.meta.global ? "Everyone" : "Friends only"),
-							description: body.challenge.description
-						};}, true);
-					});
+							res.render('challenge', {
+								title: body.meta.title,
+								name: name,
+								visibility: (body.meta.global ? "Everyone" : "Friends only"),
+								description: body.challenge.description,
+								post_time: body.meta.posted,
+							});}, true);
 				} else {
 					console.log(body);
 					res.redirect('/');
