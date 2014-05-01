@@ -68,4 +68,14 @@ body{
 
 .filler-container{
 	height:150px;
-	}
+}
+.title-container h1{
+   text-align: center;
+   color: #343434;
+   font-family: 'funkydori', sans-serif;
+	text-shadow: white 1px 1px;
+	font-size: 65px;
+	font-weight: normal;
+	margin-top: 10;
+	margin-bottom: 10;
+}
