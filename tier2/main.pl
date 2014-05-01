@@ -432,7 +432,7 @@ sub add_content { (my $obj, my $c) = @_;
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
 					my $queries=sub { query_get($_[0], $dbh); };
-					$queries->("add_content")->execute($uid, $type, $obj->{title}, $obj->{visibility});
+					$queries->("add_content")->execute($uid, $type, $obj->{title});
 					my $content_id=$dbh->{mysql_insertid};
 					unless ((defined $content_id) &&
 						(do {
@@ -457,7 +457,7 @@ sub add_content { (my $obj, my $c) = @_;
 						}
 						my $expiration;
 						if ('HASH' eq ref $obj->{expiration}) {
-							unless (6 == scalar grep { exists $obj->{expiration}->{$_}; } qw/year month day hours minutes/) {
+							unless (5 == scalar grep { exists $obj->{expiration}->{$_}; } qw/year month day hours minutes/) {
 								die_error_hash($ret, 7, "expiration: Invalid date format");
 							}
 							$expiration=sprintf("%04d-%02d-%02d %02d:%02d:00", @{$obj->{expiration}}{qw/year month day hours minutes/});
