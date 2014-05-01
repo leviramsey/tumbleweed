@@ -145,6 +145,7 @@ body{
 	font-size: 32px;
 	float: left;
 	width: 650px;
+	margin-left: 20px;
 	text-align: center;
 	}
 #default-icon-container{
@@ -157,5 +158,9 @@ body{
 	border-radius: 5px;
 	}
 #default-icon-container:hover{
-background-color: #FFF;
+	background-color: #FFF;
 	}
+#vertical-divider-container{
+	margin-left: 20px;
+	float:left;
+}
