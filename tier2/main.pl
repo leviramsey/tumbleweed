@@ -77,7 +77,7 @@ sub crypt_password {
 		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
 		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
 		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
-		add_content => 'INSERT INTO content (poster,kind,posted,title) VALUES (?,?,NOW(),?)',
+		add_content => 'INSERT INTO content (poster,kind,posted,title,visibility) VALUES (?,?,NOW(),?,?)',
 		get_content_info_by_id => 'SELECT * FROM content WHERE id=?',
 		tag_content => 'INSERT INTO taggings (tag, target) VALUES (?,?)',
 		add_challenge => 'INSERT INTO challenges (id, expiration, global) VALUES (?,?,?)',
@@ -408,7 +408,11 @@ sub add_content { (my $obj, my $c) = @_;
 		error_hash($ret, $status, $error_text);
 	} else {
 		eval {
-			unless ((defined $obj->{type}) && (defined $obj->{title}) && ($obj->{title} !~ /^\s*$/)) {
+			unless ((defined $obj->{type}) &&
+			        (defined $obj->{title}) && 
+					($obj->{title} !~ /^\s*$/) && 
+					(defined $obj->{visibility}) && 
+				    ($obj->{visibility} =~ /^[12]$/)) {
 				die_error_hash($ret, 3, "Must specify a type and title");
 			}
 			my $type;
@@ -430,7 +434,7 @@ sub add_content { (my $obj, my $c) = @_;
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
 					my $queries=sub { query_get($_[0], $dbh); };
-					$queries->("add_content")->execute($uid, $type, $obj->{title});
+					$queries->("add_content")->execute($uid, $type, $obj->{title}, $obj->{visibility});
 					my $content_id=$dbh->{mysql_insertid};
 					unless ((defined $content_id) &&
 						(do {

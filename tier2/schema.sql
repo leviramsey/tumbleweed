@@ -39,17 +39,27 @@ CREATE TABLE IF NOT EXISTS user_extdata (
 	FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE 'InnoDB';
 
+-- Avatars
+CREATE TABLE IF NOT EXISTS user_icons (
+	uid INT(8) UNSIGNED NOT NULL PRIMARY KEY,
+	localfile BOOLEAN NOT NULL,
+	gravatar BOOLEAN NOT NULL,
+	FOREIGN KEY (uid) REFERENCES users(uid) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE 'InnoDB';
+
 -- The master content index
 -- Kinds of content
 -- 0: challenges
 -- 1: responses
 -- 2: comments
+-- Visibilities: 0 - global, 1 - friends
 CREATE TABLE IF NOT EXISTS content (
 	id INT(32) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	poster INT(8) UNSIGNED NOT NULL,
 	kind INT(1) UNSIGNED NOT NULL,
 	posted DATETIME NOT NULL,
 	title TINYTEXT NOT NULL,
+	visibility INT(1) NOT NULL,
 	FOREIGN KEY (poster) REFERENCES users(uid) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE 'InnoDB';
 
