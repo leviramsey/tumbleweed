@@ -1,0 +1,141 @@
+body{
+	margin: 0;
+	padding: 0;
+	background-color: #ccc;
+	}
+.logo img{
+	padding: 25px;
+	float: right;
+	}
+.header-container{
+	position: relative;
+	height:85px;
+	background-color: #d3d3d3;
+	}
+.userbar-container{
+	width: 100%;
+	min-height:150px;
+	background-color: #666;
+	}
+.userbar-container img{
+	max-height: 100px;
+	}
+.userbar-picture-container img{
+	padding:10px;
+	padding-top: 25px;
+	}
+.userbar-username-container{
+	display: inline-block;
+	text-align: center;
+	float: left; 	
+ 	padding-top: 40px;
+	color: #cacaca;
+	font-family: 'Cabin', sans-serif;
+	font-size: 50px;
+}
+
+	
+#dark{
+	text-decoration: none;
+	color: #FFF;
+	}
+.userbar-break{
+	float:left;
+	width:100px;
+	}
+.userbar-picture-container{
+	float: left;
+	}
+.userbar-right-container{
+	color: #FFF;
+	text-align: center;
+	font-family: 'Cabin', sans-serif; 
+	font-size: 16px;
+	float: right;
+	margin-right: 10px;
+	margin-top: 5px;
+	padding: 3px;
+	background-color: #555;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	text-decoration:none;
+}
+.userbar-right-container:hover{
+	background-color: #222;
+}
+
+.filler-container{
+	height:150px;
+}
+.title-container h1{
+   text-align: center;
+   color: #343434;
+   font-family: 'funkydori', sans-serif;
+	text-shadow: white 1px 1px;
+	font-size: 65px;
+	font-weight: normal;
+	margin-top: 10;
+	margin-bottom: 5;
+}
+.settings-container h2{
+	color: #343434;
+	padding-left: 10;
+   font-family: 'Cabin', sans-serif;
+	text-shadow: white 1px 1px;
+	font-size: 35px;
+}
+#panel-1-container{
+	text-align: left;
+	width: 90%;
+	padding: 10px;
+	background-color: #b1b1b1;
+	font-family: 'Cabin', sans-serif; 
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+#panel-1-inner-container{
+	height:250px;
+}
+	
+#current-icon-container{
+	float: left;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 25px; 
+	padding: 15px;
+	text-align: center;
+	width: 175px;
+	height: 150px; 
+	font-size: 24px;
+	background-color: #dddddd;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	}
+#upload-button-container{
+	float:left;
+	text-align: center;
+	font-family: 'Cabin', sans-serif; 
+	font-size: 32px;
+	margin-top: 35px;
+	width: 400px;
+	}
+
+#upload-button-container input.upload{
+	font-family: 'Cabin', sans-serif; 
+	margin-top: 5px;
+	font-size: 18px;
+	height: 50px;	
+}
+#or-container{
+	text-align: center;
+	margin-top: 50;
+   color: #343434;
+   font-family: 'funkydori', sans-serif;
+	font-size: 70px;
+	width:50px;
+	float: left;
+}

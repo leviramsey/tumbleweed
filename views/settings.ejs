@@ -1,12 +1,12 @@
 <html>
 <head>
 <title>Settings</title>
-<link rel="stylesheet" type="text/css" href="./stylesheets/tumblefeed.css" media="all" />
+<link rel="stylesheet" type="text/css" href="./stylesheets/settings.css" media="all" />
 <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Cabin|PT+Sans' rel='stylesheet' type='text/css'>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
- <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <script>
 $(function() {
  
@@ -36,15 +36,24 @@ $(function() {
          sticky_navigation();
     });
  
-});</script>
+});
+</script>
 </head>
 <body>
 <div class="header-container"><div class="logo"><img src="./images/logo-sm.png"></div></div>
 <div class="userbar-container"><div class="userbar-picture-container"><img src="./images/iconalan.png"></div>
-	<div class="userbar-username-container">Hey there, <span id="dark"><%= user.name %></span></strong>!</div>
+	<div class="userbar-username-container">Hey there, <span id="dark">TEST</span></strong>!</div>
 	<div class="userbar-break">&nbsp;</div>
 	<a href='/logout' class="userbar-right-container"><img src="./images/iconlogout.png"><br>Log Out</a> 
 	<a href='#' class="userbar-right-container"><img src="./images/iconsettings.png"><br>Settings</a> <a href='#' class="userbar-right-container"><img src="./images/iconprofile.png"><br>My Profile</a> <a href='#' class="userbar-right-container"><img src="./images/iconchallenges.png"><br>Active Challenges</a>
 	<a href='/challenge' class="userbar-right-container"><img src="./images/icontitle.png"><br>Create A Challenge</a>
 </div>
 <div class="filler-container">.</div>
+<div class="settings-container">
+<div class="title-container"><h1>Settings</h1></div><div align="center"><div id="panel-1-container"><h2>Change Icon</h2><div id="panel-1-inner-container"><div id="current-icon-container"><img src="./images/iconalan.png"><br>Current Icon</div>
+<div id="upload-button-container">Upload a new icon!<br><div align="left"><input type="file" class="upload" /></div></div><div id="or-container">or</div></div></div>
+</div>
+<br><Br><br>
+
+</body>
+</html>

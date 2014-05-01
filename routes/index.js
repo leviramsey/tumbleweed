@@ -7,9 +7,22 @@ exports.index = function(req, res) {
 	}
 	else {
 		res.render('index', {
+			title: 'Tumbleweed',
 			registererr: req.flash('register'),
 			loginerr: req.flash('login')
 		});
+	}
+}
+
+exports.settings = function(req, res) {
+
+	if(req.session.user) {
+		res.render('settings', {
+			title: 'Settings'
+		});
+	}
+	else {
+		res.redirect('/');
 	}
 }
 
