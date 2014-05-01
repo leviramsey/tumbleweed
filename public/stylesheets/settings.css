@@ -153,7 +153,7 @@ body{
 	margin: 10px;
 	padding: 5px;
 	width:128px;
-		-webkit-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	}
@@ -164,3 +164,6 @@ body{
 	margin-left: 20px;
 	float:left;
 }
+#blank-horizontal-divider{
+	height:35px;
+	}
