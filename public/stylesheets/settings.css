@@ -88,7 +88,7 @@ body{
 }
 #panel-1-container{
 	text-align: left;
-	width: 90%;
+	width: 85%;
 	padding: 10px;
 	background-color: #b1b1b1;
 	font-family: 'Cabin', sans-serif; 
@@ -97,6 +97,7 @@ body{
 	border-radius: 10px;
 }
 #panel-1-inner-container{
+	
 	height:250px;
 }
 	
@@ -116,22 +117,21 @@ body{
 	border-radius: 5px;
 	}
 #upload-button-container{
-	float:right;
+	float:left;
 	text-align: center;
 	font-family: 'Cabin', sans-serif; 
 	font-size: 32px;
-	margin-top: 35px;
 	width: 400px;
 	}
 
 #upload-button-container input.upload{
 	font-family: 'Cabin', sans-serif; 
-	margin-top: 5px;
+	margin-top: 25px;
 	font-size: 18px;
 	height: 50px;	
 }
 #or-container{
-	float:right;
+	float:left;
 	text-align: center;
 	margin-top: 50;
    color: #FFF;
@@ -140,18 +140,22 @@ body{
 	font-size: 70px;
 	width:50px;
 }
-.default-icons-container{
-	float: right;
-	width: 600px;
-	}
-.default-icon-1-container{
+#default-icons-container{
+	font-family: 'Cabin', sans-serif; 
+	font-size: 32px;
 	float: left;
-	width:175px;
-	background-color: #FFF;
+	width: 650px;
+	text-align: center;
 	}
-.default-icon-2-container{
-	float: right;
-	width:175px;
-	background-color: #FFF;
+#default-icon-container{
+	float: left;
+	margin: 10px;
+	padding: 5px;
+	width:128px;
+		-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	}
-
+#default-icon-container:hover{
+background-color: #FFF;
+	}
