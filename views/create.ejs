@@ -64,8 +64,7 @@ $('#next-button-1').click(function() {
 	$('.options-container-3').addClass('animated bounceInLeft');
 	$('#title-container-3').addClass('animated bounceInLeft');
 	
-	// set the form
-	$('#title').val($('#challenge-title').val());
+	$('#title').val($('#challenge-title').val()); //set the title in the form
 });
 
 $('#next-button-2').click(function() {
@@ -78,8 +77,7 @@ $('#next-button-2').click(function() {
 	$('.options-container-4').addClass('animated bounceInLeft');
 	$('#title-container-4').addClass('animated bounceInLeft');
 	
-	// set the form
-	$('#description').val($('#challenge-description').val());
+	$('#description').val($('#challenge-description').val()); //set the desc in the form
 });
 	
 $('.friends-container').click(function() {
@@ -92,8 +90,7 @@ $('.friends-container').click(function() {
 	$('.options-container-5').addClass('animated bounceInLeft');
 	$('#title-container-5').addClass('animated bounceInLeft');
 	
-	// set the form
-	$('locale').val(1);				//friends = 1
+	$('locale').val(1);		//friends = 1
 });
 
 $('.global-container').click(function() {
@@ -106,8 +103,7 @@ $('.global-container').click(function() {
 	$('.options-container-5').addClass('animated bounceInLeft');
 	$('#title-container-5').addClass('animated bounceInLeft');
 	
-	// set the form
-	$('locale').val(0);				//global = 0
+	$('locale').val(0);		//global = 0
 });
 
 $('.photo-container').click(function() {
@@ -141,8 +137,6 @@ $('#next-button-4').click(function() {
 	$('.challenge-creation-container-8').show();
 	$('.options-container-8').addClass('animated bounceInLeft');
 	$('#title-container-8').addClass('animated bounceInLeft');
-	
-	// submit the form
 	$('form')[0].submit();
 });
 
