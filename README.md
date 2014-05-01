@@ -13,7 +13,7 @@
 <li><h5>cloning the repo to local</h5></li>
 <ol>
  <li>Unless you have a github desktop application, you will be likely have to use command line <a href='http://git-scm.com/'>git</a> commands. To clone the repository to a local directory, execute:
- <pre>git clone https://github.com/spacenut/tumbleweed.git /this/local/directory/</pre></li>
+ <pre>git clone https://github.com/mikesteele/tumbleweed.git /this/local/directory/</pre></li>
 
 </ol>
 <li><h5>run and access Vagrant machine</h5> execute:
