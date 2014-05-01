@@ -15,7 +15,7 @@
 <body>
 <div class="header-container"><div class="logo"><img src="/images/logo-sm.png"></div></div>
 <div class="challenge-feed-container">
-<div class="challenge-container"><div class="user-container"><img src="/images/iconfemale2.png"><br><%= name %></div><div class="info-container"><br><span id="challenge-top-text">Time: TIME_HERE / <%= visibility %></span><br><span id="challenge-main-text"><%= title %></span><br><span id="challenge-sub-text"><%= description %><br>
+<div class="challenge-container"><div class="user-container"><img src="/images/iconfemale2.png"><br><%= name %></div><div class="info-container"><br><span id="challenge-top-text">Posted: <%= post_time %> / <%= visibility %><% if (expiration) { %> / Expires: <%= expiration %><% } %></span><br><span id="challenge-main-text"><%= title %></span><br><span id="challenge-sub-text"><%= description %><br>
 <% if (typeof example === 'undefined') { %>
 	<img src="http://lorempixel.com/400/200/nature/Example/">
 <% } else { %><%= example %><% } %>

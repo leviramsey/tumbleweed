@@ -1,4 +1,5 @@
 var query = require('../lib/query');
+var util=require('../lib/util');
 
 exports.index = function(req, res) {
 
@@ -153,7 +154,9 @@ exports.view_challenge = function(req, res) {
 								name: name,
 								visibility: (body.meta.global ? "Everyone" : "Friends only"),
 								description: body.challenge.description,
-								post_time: body.meta.posted,
+								post_time: Util.json_date_stringify(body.meta.posted),
+								expiration: Util.json_date_stringify(body.meta.expiration),
+								tags: body.meta.tags
 							});}, true);
 				} else {
 					console.log(body);
