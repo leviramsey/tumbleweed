@@ -39,6 +39,7 @@ app.get('/feed', routes.feed);
 app.get('/logout', routes.logout);
 app.get('/pose_challenge', routes.challenge);
 app.get('/challenge', routes.view_challenge);
+app.get('/settings', routes.settings);
 app.post('/register', routes.register);
 app.post('/login', routes.login);
 app.post('/create', routes.create);
