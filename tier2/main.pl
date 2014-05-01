@@ -432,7 +432,7 @@ sub add_content { (my $obj, my $c) = @_;
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
 					my $queries=sub { query_get($_[0], $dbh); };
-					$queries->("add_content")->execute($uid, $type, $obj->{title}, $obj->{visibility});
+					$queries->("add_content")->execute($uid, $type, $obj->{title});
 					my $content_id=$dbh->{mysql_insertid};
 					unless ((defined $content_id) &&
 						(do {
