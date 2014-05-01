@@ -77,7 +77,7 @@ sub crypt_password {
 		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
 		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
 		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
-		add_content => 'INSERT INTO content (poster,kind,posted,title,visibility) VALUES (?,?,NOW(),?,?)',
+		add_content => 'INSERT INTO content (poster,kind,posted,title) VALUES (?,?,NOW(),?)',
 		get_content_info_by_id => 'SELECT * FROM content WHERE id=?',
 		tag_content => 'INSERT INTO taggings (tag, target) VALUES (?,?)',
 		add_challenge => 'INSERT INTO challenges (id, expiration, global) VALUES (?,?,?)',
