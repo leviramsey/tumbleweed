@@ -76,6 +76,28 @@ body{
 	text-shadow: white 1px 1px;
 	font-size: 65px;
 	font-weight: normal;
-	margin-top: 10;
-	margin-bottom: 10;
+	margin-top: 5;
+	margin-bottom: 5;
 }
+.settings-container h2{
+	color: #343434;
+	padding-left: 10;
+   font-family: 'Cabin', sans-serif;
+	text-shadow: white 1px 1px;
+	font-size: 35px;
+}
+#panel-1-container{
+	text-align: left;
+	width: 80%;
+	padding: 10px;
+	height:400px;
+	background-color: #FFF;
+	font-family: 'Cabin', sans-serif; 
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+#current-icon-container{
+	padding: 15px;
+	font-size: 24px;
+	}
