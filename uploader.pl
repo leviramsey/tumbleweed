@@ -3,7 +3,6 @@
 use Mojolicious::Lite;
 use Mojo::JSON qw/encode_json/;
 use Digest::MD5 qw/md5 md5_hex/;
-use Digest::MD5::File qw/file_md5 -nofatals/;
 use MIME::Base64;
 use URL::Encode qw/url_encode/;
 
@@ -32,8 +31,9 @@ post '/upload' => sub { (my $self) = shift;
 
 	my $md5;
 	if (ref($upload->asset) eq 'Mojo::Asset::File') {
-		my $fh=$upload->asset->handle;
-		$md5=file_md5($fh);
+		my $tract=Digest::MD5->new;
+		$tract->addfile($upload->asset->handle);
+		$md5=$tract->digest;
 	} elsif (ref($upload->asset) eq 'Mojo::Asset::Memory') {
 		$md5=md5($upload->asset->slurp);
 	}
