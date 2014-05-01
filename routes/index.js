@@ -133,6 +133,19 @@ exports.view_challenge = function(req, res) {
 	Query.Challenge.get(
 			id,
 			function (response, body) {
-				console.log(body);
+				if (body) {
+					if (0 == body.status) {
+						var poster=body.meta.poster;
+						var name="";
+						Query.User.info(poster,
+							function (row) {	name=row.name;	}, true);
+
+						res.render('challenge', {
+							// TODO
+						});
+					}
+				} else {
+					res.redirect('/');
+				}
 			});
 }
