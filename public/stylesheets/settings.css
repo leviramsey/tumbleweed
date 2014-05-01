@@ -76,7 +76,7 @@ body{
 	text-shadow: white 1px 1px;
 	font-size: 65px;
 	font-weight: normal;
-	margin-top: 5;
+	margin-top: 10;
 	margin-bottom: 5;
 }
 .settings-container h2{
@@ -88,16 +88,43 @@ body{
 }
 #panel-1-container{
 	text-align: left;
-	width: 80%;
+	width: 90%;
 	padding: 10px;
-	height:400px;
-	background-color: #FFF;
+	background-color: #b1b1b1;
 	font-family: 'Cabin', sans-serif; 
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
+#panel-1-inner-container{
+	height:300px;
+}
+	
 #current-icon-container{
+	float: left;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 50px; 
 	padding: 15px;
+	text-align: center;
+	width: 175px;
+	height: 150px; 
 	font-size: 24px;
+	background-color: #dddddd;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	}
+#upload-button-container{
+	float:left;
+	text-align: center;
+	font-family: 'Cabin', sans-serif; 
+	font-size: 24px;
+	margin-top: 125px;
+	width: 400px;
+	}
+#upload-button-container input.upload{
+	font-family: 'Cabin', sans-serif; 
+	font-size: 18px;
+	height: 50px;	
+}
