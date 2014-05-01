@@ -599,7 +599,6 @@ my %query_types = (
 post '/query' => sub {
 	(my $self) = @_;
 	my %params=%{$self->req->params->to_hash};
-	say keys %params;
 	if (defined $params{query}) {
 		my $json=decode_json($params{query});
 		my $resp;

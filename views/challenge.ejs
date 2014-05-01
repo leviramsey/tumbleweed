@@ -19,7 +19,9 @@
 <% if (typeof example === 'undefined') { %>
 	<img src="http://lorempixel.com/400/200/nature/Example/">
 <% } else { %><%= example %><% } %>
-</span><br><span id="tags">PUT_TAGS_HERE</span></div></div>
+</span><br><span id="tags"><% for (var i=0; i<tags.length; i++) { %>
+	<a href="/challenges?tag=<%= tags[i][1] %>"><%= tags[i][0] %></a>&nbsp;&nbsp;&nbsp;
+<% } %></span></div></div>
 <div class="challenge-container"><div class="user-container"><img src="/images/iconmale1.png"><br>USERNAME</div><div class="info-container"><img src="http://lorempixel.com/500/300/abstract/Solution/"><br><span id="challenge-main-text">SOLUTION_TITLE	<img src="/images/verified.png"></span><br><span id="challenge-sub-text">SOLUTION_DESCRIPTION</span><br></div></div>
 </div>
 </body>

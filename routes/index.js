@@ -149,6 +149,10 @@ exports.view_challenge = function(req, res) {
 						function (row) {
 							name=row.name;
 
+							if (typeof body.meta.tags !== 'undefined') {
+								body.meta.tags=body.meta.tags.map(function (x) { return [ x, encodeURIComponent(x) ]; });
+							}
+
 							res.render('challenge', {
 								title: body.meta.title,
 								name: name,
@@ -156,7 +160,8 @@ exports.view_challenge = function(req, res) {
 								description: body.challenge.description,
 								post_time: Util.json_date_stringify(body.meta.posted),
 								expiration: Util.json_date_stringify(body.meta.expiration),
-								tags: body.meta.tags
+								tags: body.meta.tags,
+								example: body.challenge.example
 							});}, true);
 				} else {
 					console.log(body);
