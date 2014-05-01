@@ -19,7 +19,7 @@
 <div class="challenge-creation-container-6"><br><div align="center"><div id="title-container-6"><h1>How long should the challenge last?</h1></div><div class="options-container-6"><img src="./images/icontime.png"><br><br><div id="slider"></div><p><label for="amount"></label><input type="text" id="amount" style="border:0; color:#000; font-weight:bold; font-size:22px; text-align:center; background-color: transparent;"></p></div></div><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-3"><img src="./images/iconnext.png"></div>
 <div class="challenge-creation-container-7"><br><div align="center"><div id="title-container-7"><h1>Tag it!</h1></div><div class="options-container-7"><img src="./images/icontag.png"><br><br><input id="challenge-tags"></div></div><br><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-4"><img src="./images/iconnext.png"></div>
 
-<form action='/create' method='post'>
+<form id="final" action='/create' method='post'>
 	<input type='hidden' id='title' name='title' value='poop'>
 	<input type='hidden' id='description' name='description'>
 	<input type='hidden' id='locale' name='locale'>
@@ -151,8 +151,8 @@ $('#next-button-4').click(function() {
 
 	$('#tags').val($('#challenge-tags').val());
 	
-	//submit the forms
-	$('form')[0].submit();
+	//submit the final forms
+	$('#final')[0].submit();
 });
 
  $(function() {
