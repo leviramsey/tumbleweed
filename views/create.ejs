@@ -129,7 +129,14 @@ $('#next-button-3').click(function() {
 		var now = new Date();
 		var timeAmount = $('#amount').val();
 		var timeLater = new Date(now.getTime() + (timeAmount*1000*60*60));
-		$('#duration').val(timeLater);
+		var dateAsJSON= {
+			year: timeLater.getFullYear(),
+			month: timeLater.getMonth(),
+			day: timeLater.getDate(),
+			hours: timeLater.getHours(),
+			minutes: timeLater.getMinutes()
+		};
+		$('#duration').val(JSON.stringify(dateAsJSON));
 });
 
 $('#next-button-4').click(function() {
