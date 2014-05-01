@@ -107,9 +107,6 @@ exports.create = function(req, res) {
 		var body=req.body;
 		var content={ description: body.description };
 		var tags=body.tags.split(/\s+/);
-		tags=[ "baz" ];	//dummy!
-		body.duration='{ "year": "2015", "month": "1", "day": "1", "hours": "12", "minutes": "15" }';	// dummy!
-		body.locale=0;	// dummy!
 		console.log(body);
 		Query.Challenge.create(req.session.user.name,
 				               body.title,
