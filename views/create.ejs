@@ -17,7 +17,7 @@
 <div class="challenge-creation-container-4"><br><div align="center"><div id="title-container-4"><h1>Who's Participating?</h1></div><div class="options-container-4"><div class="friends-container"><img src="./images/iconfriends.png"><br>Friends</div><div class="global-container"><img src="./images/iconglobe.png"><br>Global</div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-35"><div class="overlay">35%</div></div></div></div><br></div>
 <div class="challenge-creation-container-5"><br><div align="center"><div id="title-container-5"><h1>Upload an example!</h1></div><div class="options-container-5"><div class="photo-video-container"><div class="photo-container"><img src="./images/iconphoto.png"><br>Image</div><div class="video-container"><img src="./images/iconvideo.png"><br>Video</div></div><div class="music-text-container"><div class="sound-container"><img src="./images/iconmusic.png"><br>Sound</div><div class="text-container"><img src="./images/icontext.png"><br>Text</div></div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-25"><div class="overlay">25%</div></div></div></div><br><br></div>
 <div class="challenge-creation-container-6"><br><div align="center"><div id="title-container-6"><h1>How long should the challenge last?</h1></div><div class="options-container-6"><img src="./images/icontime.png"><br><br><div id="slider"></div><p><label for="amount"></label><input type="text" id="amount" style="border:0; color:#000; font-weight:bold; font-size:22px; text-align:center; background-color: transparent;"></p></div></div><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-3"><img src="./images/iconnext.png"></div>
-<div class="challenge-creation-container-7"><br><div align="center"><div id="title-container-7"><h1>Tag it!</h1></div><div class="options-container-7"><img src="./images/icontag.png"><br><br><input id="tags"></div></div><br><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-4"><img src="./images/iconnext.png"></div>
+<div class="challenge-creation-container-7"><br><div align="center"><div id="title-container-7"><h1>Tag it!</h1></div><div class="options-container-7"><img src="./images/icontag.png"><br><br><input id="challenge-tags"></div></div><br><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-4"><img src="./images/iconnext.png"></div>
 
 <form action='/create' method='post'>
 	<input type='hidden' id='title' name='title' value='poop'>
@@ -141,6 +141,10 @@ $('#next-button-4').click(function() {
 	$('.challenge-creation-container-8').show();
 	$('.options-container-8').addClass('animated bounceInLeft');
 	$('#title-container-8').addClass('animated bounceInLeft');
+
+	$('#tags').val($('#challenge-tags').val());
+	
+	//submit the forms
 	$('form')[0].submit();
 });
 
