@@ -410,10 +410,8 @@ sub add_content { (my $obj, my $c) = @_;
 		eval {
 			unless ((defined $obj->{type}) &&
 			        (defined $obj->{title}) && 
-					($obj->{title} !~ /^\s*$/) && 
-					(defined $obj->{visibility}) && 
-				    ($obj->{visibility} =~ /^[01]$/)) {
-				die_error_hash($ret, 3, "Must specify a type, title, and visibility");
+					($obj->{title} !~ /^\s*$/)) {
+				die_error_hash($ret, 3, "Must specify a type and title");
 			}
 			my $type;
 			$obj->{type}=lc $obj->{type};
