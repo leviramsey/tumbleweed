@@ -39,6 +39,7 @@ app.get('/feed', routes.feed);
 app.get('/logout', routes.logout);
 app.get('/settings', routes.settings);
 app.get('/challenge', routes.challenge);
+app.get('/profile', routes.profile);
 app.post('/register', routes.register);
 app.post('/login', routes.login);
 

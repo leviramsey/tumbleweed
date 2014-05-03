@@ -39,6 +39,21 @@ exports.feed = function(req, res) {
 	}
 }
 
+
+exports.profile = function(req, res) {
+
+	if(req.session.user) {
+		res.render('profile', {
+			title: req.session.user.name + '| Tumbleweed',
+			user: req.session.user
+		});
+	}
+	else {
+		res.redirect('/');
+	}
+}
+
+
 exports.challenge = function(req, res) {
 
 	if(req.session.user) {
