@@ -1,0 +1,67 @@
+body{
+	margin: 0;
+	}
+.Collage{
+	visibility: hidden;
+    padding:10px;
+    }
+
+.Collage img{
+    vertical-align:bottom;
+    box-shadow:0px 3px 4px #dcdcdc;
+    border-radius: 6px;
+    border:6px solid #FFF;
+    }
+.logo img{
+	padding: 25px;
+	float: right;
+	}
+.header-container{
+	position: relative;
+	height:85px;
+	background-color: #d3d3d3;
+	}
+.container-2{
+	background-color: #404040;
+	height:180px;
+	}
+.container-2 img{
+	padding: 25px;
+	}
+.profile-text{
+	position: relative;
+	float: left;
+	top:30px;
+	left:20px;
+	font-family: Cabin, sans-serif;
+	font-size: 36;
+	color: #eeeeee;
+}
+.profile-text h1{
+	margin: 0;
+	font-family: Cabin, sans-serif;
+	font-size: 48;
+	color: #eeeeee;
+}
+.profile-image{
+	position: relative;
+	float:left;
+}
+.profile-texture{
+	position: relative;
+	float: left;
+}
+.profile-subtitle{
+position: relative;
+float: left;
+left: -210px;
+font-size: 18px;
+top: 90px;
+font-family: Cabin, sans-serif;
+color:white;
+}
+.loader{
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+	}

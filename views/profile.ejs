@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>TUMBLEWEED</title>
+
+    <link rel="stylesheet" type="text/css" href="./stylesheets/profile.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="./javascripts/collageplus/css/transitions.css" media="all" />
+    <link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+
+
+    <script src="./javascripts/collageplus/jquery.collagePlus.js"></script>
+    <script src="./javascripts/collageplus/extras/jquery.removeWhitespace.js"></script>
+    <script src="./javascripts/collageplus/extras/jquery.collageCaption.js"></script>
+
+    <script type="text/javascript">
+
+    // All images need to be loaded for this plugin to work so
+    // we end up waiting for the whole window to load in this example
+    $(window).load(function () {
+        $(document).ready(function(){
+            collage();
+            $('.Collage').collageCaption();
+            $(".Collage").css({"visibility": "visible"});
+            $(".loader").hide();
+            $('.Collage').hide();
+            $('.Collage').fadeIn();
+        });
+    });
+
+
+    // Here we apply the actual CollagePlus plugin
+    function collage() {
+        $('.Collage').removeWhitespace().collagePlus(
+            {
+                'fadeSpeed'     : 2000,
+                'targetHeight'  : 200
+            }
+        );
+    };
+
+    // This is just for the case that the browser window is resized
+    var resizeTimer = null;
+    $(window).bind('resize', function() {
+        // hide all the images until we resize them
+        $('.Collage .Image_Wrapper').css("opacity", 0);
+        // set a timer to re-apply the plugin
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(collage, 200);
+    });
+
+    </script>
+    
+</head>
+<body>
+<div class="header-container"><div class="logo"><img src="./images/logo-sm.png"></div></div></div>
+<div class="container-2"><div class="profile-image"><img src="./images/iconalan.png"></div><div class = "profile-texture"><img src="./images/texture.png"></div><div class="profile-text"><h1><%= user.name %></h1><%= user.long_name %></div></div>
+<div align="center"><div class="loader"><img src="./images/loading.gif"></div></div><div class="Collage">
+<img src="http://lorempixel.com/350/150/nature/"><img src="http://lorempixel.com/500/175/nature/"><img src="http://lorempixel.com/700/500/nature/">
+<img src="http://lorempixel.com/440/500/nature/"><img src="http://lorempixel.com/200/200/nature/"><img src="http://lorempixel.com/550/250/nature/">
+<img src="http://lorempixel.com/200/350/nature/"><img src="http://lorempixel.com/250/400/nature/"><img src="http://lorempixel.com/500/500/nature/">
+<img src="http://lorempixel.com/350/500/nature/"><img src="http://lorempixel.com/500/750/nature/"><img src="http://lorempixel.com/300/300/nature/">
+<img src="http://lorempixel.com/400/550/nature/"><img src="http://lorempixel.com/500/450/nature/"><img src="http://lorempixel.com/700/500/nature/">
+</div>
+</body>
+</html>
