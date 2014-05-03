@@ -14,13 +14,21 @@ unless (-e $directory) {
 	mkdir($directory, 0744);
 }
 
-get '/' => 'form';
+under '/' => sub { (my $self) = shift;
+	#CHANGE THIS IN PRODUCTION!!!!!!
+	for ($self->res->headers) {
+		$_->header('Access-Control-Allow-Origin' => '*');
+		$_->header('Access-Control-Allow-Methods' => 'POST');
+		$_->header('Access-Control-Allow-Headers' => 'Content-Type, X-CSRF-Token');
+	}
+	$self->respond_to(any => { data => '', status => 200 });
+};
 
-post '/upload' => sub { (my $self) = shift;
+post '/upload' => sub { use bigint; (my $self) = shift;
 	return $self->render(data => encode_json({ status => 1, error => 'File too large'})) if $self->req->is_limit_exceeded;
 
 	my $upload=$self->param('upload');
-	return $self->redirect_to('form') unless $upload;
+	return $self->render(data => encode_json({ status => 2, error => 'Upload not specified'})) unless ($upload);
 	my $size=$upload->size;
 	my $name=$upload->filename;
 
@@ -33,10 +41,15 @@ post '/upload' => sub { (my $self) = shift;
 	if (ref($upload->asset) eq 'Mojo::Asset::File') {
 		my $tract=Digest::MD5->new;
 		$tract->addfile($upload->asset->handle);
-		$md5=$tract->digest;
+		$md5=$tract->hexdigest;
 	} elsif (ref($upload->asset) eq 'Mojo::Asset::Memory') {
-		$md5=md5($upload->asset->slurp);
+		$md5=md5_hex($upload->asset->slurp);
+	} else {
+		say STDERR "Phooey!";
 	}
+	$md5=hex($md5);
+	say STDERR $md5;
+	say STDERR $name;
 	my $filename;
 	while (1) {
 		my $b64=encode_base64($md5);

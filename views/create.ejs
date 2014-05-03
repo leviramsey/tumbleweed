@@ -19,16 +19,42 @@
 <div class="challenge-creation-container-6"><br><div align="center"><div id="title-container-6"><h1>How long should the challenge last?</h1></div><div class="options-container-6"><img src="./images/icontime.png"><br><br><div id="slider"></div><p><label for="amount"></label><input type="text" id="amount" style="border:0; color:#000; font-weight:bold; font-size:22px; text-align:center; background-color: transparent;"></p></div></div><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-3"><img src="./images/iconnext.png"></div>
 <div class="challenge-creation-container-7"><br><div align="center"><div id="title-container-7"><h1>Tag it!</h1></div><div class="options-container-7"><img src="./images/icontag.png"><br><br><input id="challenge-tags"></div></div><br><div class="progress-container"><div class="progress-radial progress-30"><div class="overlay">30%</div></div></div><span id="next-button-4"><img src="./images/iconnext.png"></div>
 
+<form id="example" method="post" name="fileinfo" onsubmit="return uploadFile();" style="display: hidden">
+	<input type="file" name="upload" required />
+	<input type="submit" value="Upload" />
+</form>
+
 <form id="final" action='/create' method='post'>
 	<input type='hidden' id='title' name='title' value='poop'>
 	<input type='hidden' id='description' name='description'>
 	<input type='hidden' id='locale' name='locale'>
-<!--	<input type='hidden' name='upload'> -->
+	<input type='hidden' id='upload' name='upload'>
 	<input type='hidden' id='duration' name='duration'>
 	<input type='hidden' id='tags' name='tags'>
 </form>
 
 <script>
+
+function uploadFile() {
+	var fd=new FormData(document.getElementById("example"));
+	$.ajax({
+		url: "http://" + window.location.hostname + ":3000/upload",
+		type: "POST",
+		data: fd,
+		enctype: 'multipart/form-data',
+		processData: false,
+		contentType: false
+	}).done(function (data, textStatus, jqXHR) {
+		var json=JSON.parse(jqXHR.responseText);
+		if (json.filename) {
+			$('#upload').val(json.filename);
+		} else {
+			// error
+		}
+	});
+
+	return false;
+}
         
 $( document ).ready(function() {
  	$('h1').addClass('animated fadeInDown');
@@ -115,6 +141,7 @@ $('.photo-container').click(function() {
 	$('.challenge-creation-container-6').show();
 	$('.options-container-6').addClass('animated bounceInLeft');
 	$('#title-container-6').addClass('animated bounceInLeft');
+	$('#example').show();
 });
 
 $('#next-button-3').click(function() {

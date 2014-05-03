@@ -114,7 +114,8 @@ exports.create = function(req, res) {
 	}
 	else {
 		var body=req.body;
-		var content={ description: body.description };
+		var content={ description: body.description, example: body.upload };
+		console.log(body.upload);
 		var tags=body.tags.split(/\s+/);
 		Query.Challenge.create(req.session.user.name,
 				               body.title,
@@ -161,7 +162,7 @@ exports.view_challenge = function(req, res) {
 								post_time: Util.json_date_stringify(body.meta.posted),
 								expiration: Util.json_date_stringify(body.meta.expiration),
 								tags: body.meta.tags,
-								example: body.challenge.example
+								example: '/uploads/' + body.challenge.example
 							});}, true);
 				} else {
 					console.log(body);
