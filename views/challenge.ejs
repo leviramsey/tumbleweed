@@ -1,9 +1,8 @@
 <html>
 <head>
-<title>Tumblefeed</title>
-<link href='./public/stylesheets/challenge.css' rel='stylesheet' type='text/css'>
+<title>Tumbleweed - <%= title %></title>
+<link href='./stylesheets/challenge.css' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Lobster+Two:100,400,400italic|Cabin' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="tumblefeed.css" media="all" />
 <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
 <link rel="stylesheet" type="text/css" href="funkydori-web-stuff/funkydori.css" media="all" />
 <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
@@ -14,10 +13,19 @@
  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 </head>
 <body>
-<div class="header-container"><div class="logo"><img src="./public/images/logo.png"></div></div>
+<div class="header-container"><div class="logo"><img src="/images/logo-sm.png"></div></div>
 <div class="challenge-feed-container">
-<div class="challenge-container"><div class="user-container"><img src="./public/images/iconfemale2.png"><br>USERNAME</div><div class="info-container"><br><span id="challenge-top-text">Time: TIME_HERE / Friends or Global: GLOBAL_OR_FRIENDS</span><br><span id="challenge-main-text">CHALLENGE_TITLE</span><br><span id="challenge-sub-text">DESCRIPTION<br><img src="http://lorempixel.com/400/200/nature/Example/"></span><br><span id="tags">PUT_TAGS_HERE</span></div></div>
-<div class="challenge-container"><div class="user-container"><img src="./public/images/iconmale1.png"><br>USERNAME</div><div class="info-container"><img src="http://lorempixel.com/500/300/abstract/Solution/"><br><span id="challenge-main-text">SOLUTION_TITLE	<img src="./public/images/verified.png"></span><br><span id="challenge-sub-text">SOLUTION_DESCRIPTION</span><br></div></div>
+<div class="challenge-container"><div class="user-container"><img src="/images/iconfemale2.png"><br><%= name %></div><div class="info-container"><br><span id="challenge-top-text">Posted: <%= post_time %> / <%= visibility %><% if (expiration) { %> / Expires: <%= expiration %><% } %></span><br><span id="challenge-main-text"><%= title %></span><br><span id="challenge-sub-text"><%= description %><br>
+<% if (typeof example === 'undefined') { %>
+	<img src="http://lorempixel.com/400/200/nature/Example/">
+<% } else {
+	var image_re=/\.(png|jpg|gif)$/;
+	if (example.match(image_re)) { %><img src="<%= example %>"><% }
+ } %>
+</span><br><span id="tags"><% for (var i=0; i<tags.length; i++) { %>
+	<a href="/challenges?tag=<%= tags[i][1] %>"><%= tags[i][0] %></a>&nbsp;&nbsp;&nbsp;
+<% } %></span></div></div>
+<div class="challenge-container"><div class="user-container"><img src="/images/iconmale1.png"><br>USERNAME</div><div class="info-container"><img src="http://lorempixel.com/500/300/abstract/Solution/"><br><span id="challenge-main-text">SOLUTION_TITLE	<img src="/images/verified.png"></span><br><span id="challenge-sub-text">SOLUTION_DESCRIPTION</span><br></div></div>
 </div>
 </body>
 </html>

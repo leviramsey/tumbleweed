@@ -37,11 +37,14 @@ var routes = require('./routes');
 app.get('/', routes.index);
 app.get('/feed', routes.feed);
 app.get('/logout', routes.logout);
+app.get('/pose_challenge', routes.challenge);
+app.get('/challenge', routes.view_challenge);
 app.get('/settings', routes.settings);
 app.get('/challenge', routes.challenge);
 app.get('/profile', routes.profile);
 app.post('/register', routes.register);
 app.post('/login', routes.login);
+app.post('/create', routes.create);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

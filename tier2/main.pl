@@ -77,9 +77,10 @@ sub crypt_password {
 		add_extdata => 'INSERT INTO user_extdata (uid,k,v,priority,display) VALUES (?,?,?,?,?)',
 		get_extdata_by_key => 'SELECT * FROM user_extdata WHERE uid=? AND k=?',
 		delete_extdata_by_key => 'DELETE FROM user_extdata WHERE uid=? AND k=?',
-		add_content => 'INSERT INTO content (poster,kind,posted,title,visibility) VALUES (?,?,NOW(),?,?)',
+		add_content => 'INSERT INTO content (poster,kind,posted,title) VALUES (?,?,NOW(),?)',
 		get_content_info_by_id => 'SELECT * FROM content WHERE id=?',
 		tag_content => 'INSERT INTO taggings (tag, target) VALUES (?,?)',
+		get_tags => 'SELECT tag FROM taggings WHERE target=?',
 		add_challenge => 'INSERT INTO challenges (id, expiration, global) VALUES (?,?,?)',
 		cnt_challenge_expiring => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration=? AND global=?',
 		cnt_challenge_noexpire => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration IS NULL AND global=?',
@@ -106,7 +107,14 @@ my %res=(
 	digitx4 => qr/^\d{4}$/,
 	digitx2 => qr/^\d{2}$/,
 	digitx1_plus => qr/^\d+$/,
+	datetime_format => qr/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/,
 );
+
+sub sql_datetime_to_object { (my $sqldt) = @_;
+	(my $year, my $month, my $day, my $hours, my $minutes) = ($sqldt =~ /$res{datetime_format}/);
+
+	return { year => $year, month => $month, day => $day, hours => $hours, minutes => $minutes };
+}
 
 sub error_hash { (my $href, my $status, my $desc) = @_;
 	return unless ((ref $href) eq 'HASH');
@@ -410,9 +418,7 @@ sub add_content { (my $obj, my $c) = @_;
 		eval {
 			unless ((defined $obj->{type}) &&
 			        (defined $obj->{title}) && 
-					($obj->{title} !~ /^\s*$/) && 
-					(defined $obj->{visibility}) && 
-				    ($obj->{visibility} =~ /^[12]$/)) {
+					($obj->{title} !~ /^\s*$/)) {
 				die_error_hash($ret, 3, "Must specify a type and title");
 			}
 			my $type;
@@ -434,7 +440,7 @@ sub add_content { (my $obj, my $c) = @_;
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
 					my $queries=sub { query_get($_[0], $dbh); };
-					$queries->("add_content")->execute($uid, $type, $obj->{title}, $obj->{visibility});
+					$queries->("add_content")->execute($uid, $type, $obj->{title});
 					my $content_id=$dbh->{mysql_insertid};
 					unless ((defined $content_id) &&
 						(do {
@@ -459,7 +465,7 @@ sub add_content { (my $obj, my $c) = @_;
 						}
 						my $expiration;
 						if ('HASH' eq ref $obj->{expiration}) {
-							unless (6 == scalar grep { exists $obj->{expiration}->{$_}; } qw/year month day hours minutes/) {
+							unless (5 == scalar grep { exists $obj->{expiration}->{$_}; } qw/year month day hours minutes/) {
 								die_error_hash($ret, 7, "expiration: Invalid date format");
 							}
 							$expiration=sprintf("%04d-%02d-%02d %02d:%02d:00", @{$obj->{expiration}}{qw/year month day hours minutes/});
@@ -533,6 +539,19 @@ sub get_challenge { (my $obj, my $c) = @_;
 				if (defined $ret->{meta}) {
 					$ret->{meta}->{id}=$id;
 
+					$queries->('get_tags')->execute($id);
+					my @tags;
+					while (defined (my $tag=$queries->('get_tags')->fetchrow_arrayref())) {
+						push @tags, $tag->[0];
+					}
+					if (scalar @tags) {
+						$ret->{meta}->{tags}=\@tags;
+					}
+
+					for my $key (qw/posted expiration/) {
+						$ret->{meta}->{$key}=sql_datetime_to_object($ret->{meta}->{$key}) if defined $ret->{meta}->{$key};
+					}
+
 					my $mongo=$c->app->mongo;
 					my $mongocoll=$mongo->{database}->get_collection('challenge');
 					my $cursor=$mongocoll->find({ _id => $id });
@@ -580,7 +599,6 @@ my %query_types = (
 post '/query' => sub {
 	(my $self) = @_;
 	my %params=%{$self->req->params->to_hash};
-	say keys %params;
 	if (defined $params{query}) {
 		my $json=decode_json($params{query});
 		my $resp;

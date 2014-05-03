@@ -1,4 +1,5 @@
 var query = require('../lib/query');
+var util=require('../lib/util');
 
 exports.index = function(req, res) {
 
@@ -7,21 +8,17 @@ exports.index = function(req, res) {
 	}
 	else {
 		res.render('index', {
-			title: 'Tumbleweed',
 			registererr: req.flash('register'),
 			loginerr: req.flash('login')
 		});
 	}
 }
-
 exports.settings = function(req, res) {
-
 	if(req.session.user) {
 		res.render('settings', {
 			title: 'Settings'
 		});
-	}
-	else {
+	} else {
 		res.redirect('/');
 	}
 }
@@ -131,9 +128,60 @@ exports.create = function(req, res) {
 		res.redirect('/');
 	}
 	else {
-		
-		
-		
-		
+		var body=req.body;
+		var content={ description: body.description, example: body.upload };
+		console.log(body.upload);
+		var tags=body.tags.split(/\s+/);
+		Query.Challenge.create(req.session.user.name,
+				               body.title,
+							   body.locale,
+							   tags,
+							   JSON.parse(body.duration),
+							   content,
+			function(response, body) {
+				if (body) {
+					var id=body.id;
+					res.redirect('/challenge?id='+id);
+				} else {
+					// Something fscked up...
+					res.redirect('/');
+				}
+			});
 	}
+}
+
+exports.view_challenge = function(req, res) {
+	if (!(req.query.id)) {
+		res.redirect('/feed');
+	}
+
+	var id=req.query.id;
+	Query.Challenge.get(
+			id,
+			function (response, body) {
+				if (body && (0 == body.status)) {
+					var poster=body.meta.poster;
+					Query.User.info(poster,
+						function (row) {
+							name=row.name;
+
+							if (typeof body.meta.tags !== 'undefined') {
+								body.meta.tags=body.meta.tags.map(function (x) { return [ x, encodeURIComponent(x) ]; });
+							}
+
+							res.render('challenge', {
+								title: body.meta.title,
+								name: name,
+								visibility: (body.meta.global ? "Everyone" : "Friends only"),
+								description: body.challenge.description,
+								post_time: Util.json_date_stringify(body.meta.posted),
+								expiration: Util.json_date_stringify(body.meta.expiration),
+								tags: body.meta.tags,
+								example: '/uploads/' + body.challenge.example
+							});}, true);
+				} else {
+					console.log(body);
+					res.redirect('/');
+				}
+			});
 }
