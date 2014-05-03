@@ -126,6 +126,11 @@ $('#next-button-3').click(function() {
 	$('.challenge-creation-container-7').show();
 	$('.options-container-7').addClass('animated bounceInLeft');
 	$('#title-container-7').addClass('animated bounceInLeft');
+	
+	var heyheyhey = $('#amount').val();
+	
+	
+	
 });
 
 $('#next-button-4').click(function() {
@@ -167,10 +172,10 @@ $( "#slider" ).slider({
 	max: 100,
 	step: 1,
 	slide: function( event, ui ) {
-	$( "#amount" ).val( ui.value  + " hours");
+	$( "#amount" ).val( ui.value);
 	}
 });
-	$( "#amount" ).val( $( "#slider" ).slider( "value" ) + " hours");
+	$( "#amount" ).val( $( "#slider" ).slider( "value" ));
 });
 
 	var scrollSpeed = 70;
