@@ -101,6 +101,21 @@ font-size: 18px;
 	margin-top: 5;
 	margin-bottom: 10;
 	}
+.challenge-creation-container-5-5{
+	font-family: 'PT Sans', sans-serif;
+	font-size: 22px;
+	text-align: center;
+	background-color: #668e9e;
+	height: 100%;
+	width:100%;
+	}
+.challenge-creation-container-5-5 h1{
+	font-family: 'Cabin', sans-serif;
+	font-size: 36px;
+	font-weight: normal;
+	margin-top: 5;
+	margin-bottom: 10;
+	}
 .challenge-creation-container-6{
 	font-family: 'PT Sans', sans-serif;
 	font-size: 22px;
