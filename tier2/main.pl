@@ -311,7 +311,7 @@ sub user_info { (my $obj) = @_;
 				} elsif ($locloc) {
 					$ret->{row}->{avatar}=$locloc;
 				} else {
-					$ret->{row}->{avatar}='snake';
+					$ret->{row}->{avatar}='images/default.png';
 				}
 			});
 	}
