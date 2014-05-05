@@ -17,7 +17,7 @@ use MongoDB;
 
 my $connector=DBIx::Connector->new(
 	'dbi:mysql:tumbleweed',
-	'levi',
+	$DB::Password::user,
 	$DB::Password::mine,
 );
 
