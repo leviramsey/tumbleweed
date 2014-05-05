@@ -13,10 +13,12 @@ exports.index = function(req, res) {
 		});
 	}
 }
+
 exports.settings = function(req, res) {
 	if(req.session.user) {
 		res.render('settings', {
-			title: 'Settings'
+			title: 'Settings',
+			user: req.session.user
 		});
 	} else {
 		res.redirect('/');
