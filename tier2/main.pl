@@ -13,6 +13,8 @@ use Math::Random::Secure;
 
 use Mojo::Log;
 
+use URL::Encode qw/url_encode/;
+
 use MongoDB;
 
 my $connector=DBIx::Connector->new(
@@ -312,6 +314,9 @@ sub user_info { (my $obj) = @_;
 					$ret->{row}->{avatar}=$locloc;
 				} else {
 					$ret->{row}->{avatar}='images/default.png';
+				}
+				if ($ret->{row}->{avatar}) {
+					$ret->{row}->{avatar}=url_encode($ret->{row}->{avatar});
 				}
 			});
 	}
