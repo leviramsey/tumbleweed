@@ -27,7 +27,7 @@ exports.feed = function(req, res) {
 
 	if(req.session.user) {
 		res.render('feed', {
-			title: req.session.user.name + '\'s Tumblefeed Page',
+			title: req.session.user.name + '\'s Tumblefeed',
 			user: req.session.user
 		});
 	}
@@ -159,7 +159,7 @@ exports.view_challenge = function(req, res) {
 	Query.Challenge.get(
 			id,
 			function (response, body) {
-				if (body && (0 == body.status)) {
+				if (body && body.meta && (0 == body.status)) {
 					var poster=body.meta.poster;
 					Query.User.info(poster,
 						function (row) {
