@@ -14,10 +14,10 @@
 <div class="challenge-creation-container-1"><br><div align="center"><div id="title-container-1"><h1>Challenge Creator</h1></div><br><div class="options-container-1"><img src="./images/icontrophy.png"><br><br><br><div id="begin-button">Begin</div></div></div><div class="progress-container"></div></div>
 <div class="challenge-creation-container-2"><br><div align="center"><div id="title-container-2"><h1>Challenge title?</h1></div><div class="options-container-2"><img src="./images/icontitle.png"><br><br><input id='challenge-title' type="text"><br></div></div><br><div class="progress-container"><div class="progress-radial progress-10"><div class="overlay">10%</div></div></div><span id="next-button-1"><img src="./images/iconnext.png"></span></div>
 <div class="challenge-creation-container-3"><br><div align="center"><div id="title-container-3"><h1>Describe it!</h1></div><div class="options-container-3"><img src="./images/icondescribe.png"><br><br><textarea id='challenge-description' rows="6" cols="50"></textarea></div></div><br><div class="progress-container"><div class="progress-radial progress-20"><div class="overlay">20%</div></div></div><span id="next-button-2"><img src="./images/iconnext.png"></span></div>
-<div class="challenge-creation-container-4"><br><div align="center"><div id="title-container-4"><h1>Who's Participating?</h1></div><div class="options-container-4"><div class="friends-container"><img src="./images/iconfriends.png"><br>Friends</div><div class="global-container"><img src="./images/iconglobe.png"><br>Global</div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-55"><div class="overlay">55%</div></div></div></div><br></div>
-<div class="challenge-creation-container-5"><br><div align="center"><div id="title-container-5"><h1>Upload an example!</h1></div><div class="options-container-5"><div class="photo-video-container"><div class="photo-container"><img src="./images/iconphoto.png"><br>Image</div><div class="video-container"><img src="./images/iconvideo.png"><br>Video</div></div><div class="music-text-container"><div class="sound-container"><img src="./images/iconmusic.png"><br>Sound</div><div class="text-container"><img src="./images/icontext.png"><br>Text</div></div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-55"><div class="overlay">55%</div></div></div></div><br><br></div>
+<div class="challenge-creation-container-4"><br><div align="center"><div id="title-container-4"><h1>Who's Participating?</h1></div><div class="options-container-4"><div class="friends-container"><img src="./images/iconfriends.png"><br>Friends</div><div class="global-container"><img src="./images/iconglobe.png"><br>Global</div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-35"><div class="overlay">35%</div></div></div></div><br></div>
+<div class="challenge-creation-container-5"><br><div align="center"><div id="title-container-5"><h1>Upload an example!</h1></div><div class="options-container-5"><div class="photo-video-container"><div class="photo-container"><img src="./images/iconphoto.png"><br>Image</div><div class="video-container"><img src="./images/iconvideo.png"><br>Video</div></div><div class="music-text-container"><div class="sound-container"><img src="./images/iconmusic.png"><br>Sound</div><div class="text-container"><img src="./images/icontext.png"><br>Text</div></div></div></div><br><div align="center"><div class="progress-container"><div class="progress-radial progress-45"><div class="overlay">45%</div></div></div></div><br><br></div>
 <div class="challenge-creation-container-5-5"><br><div align="center"><div id="title-container-5-5"><h1>Upload an image!</h1></div><div class="options-container-5-5">
-<img src="./images/iconphoto.png"><br><form id="example" method="post" name="fileinfo" onsubmit="return uploadFile();" style="display: hidden">
+<img src="./images/iconphoto.png"><br><br><form id="example" method="post" name="fileinfo" onsubmit="return uploadFile();" style="display: hidden">
 	<input type="file" name="upload" required />
 	<input type="submit" value="Upload" />
 </form><br>
@@ -147,6 +147,18 @@ $('.photo-container').click(function() {
 	$('.options-container-5-5').addClass('animated bounceInLeft');
 	$('#title-container-5-5').addClass('animated bounceInLeft');
 	$('#example').show();
+});
+
+$('.sound-container').click(function() {
+	alert("Audio, text, and video uploads are not supported at this time! Try a photo upload!");
+});
+
+$('.text-container').click(function() {
+	alert("Audio, text, and video uploads are not supported at this time! Try a photo upload!");
+});
+
+$('.video-container').click(function() {
+	alert("Audio, text, and video uploads are not supported at this time! Try a photo upload!");
 });
 
 uploadtransition = function() {
