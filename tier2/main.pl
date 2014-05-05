@@ -305,13 +305,13 @@ sub user_info { (my $obj) = @_;
 				die_error_hash($ret, 3, 'User ID does not exist') unless (defined $ret->{row});
 
 				$queries->('get_icon')->execute($uid);
-				(my $gravatar, my $locloc) = $ret->('get_icon')->fetchrow_array();
+				(my $gravatar, my $locloc) = $queries->('get_icon')->fetchrow_array();
 				if ($gravatar) {
 					$ret->{row}->{gravatar}=1;
 				} elsif ($locloc) {
 					$ret->{row}->{avatar}=$locloc;
 				} else {
-					$ret->{row}->{avatar}='default.png';
+					$ret->{row}->{avatar}='snake';
 				}
 			});
 	}
