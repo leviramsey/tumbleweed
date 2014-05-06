@@ -20,7 +20,7 @@ use MongoDB;
 my $connector=DBIx::Connector->new(
 	'dbi:mysql:tumbleweed',
 	$DB::Password::user,
-	$DB::Password::mine,
+	$DB::Password::pass,
 );
 
 app->attr(mongo => sub { (my $self) = @_;
@@ -608,7 +608,6 @@ sub get_challenge { (my $obj, my $c) = @_;
 				(defined $obj->{active}) ||
 				(defined $obj->{user}) ||
 				(defined $obj->{name})) {
-				log_it("info", "normal multiple");
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
 					my $queries=sub { query_get($_[0], $dbh); };
