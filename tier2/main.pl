@@ -589,9 +589,16 @@ sub get_challenge { (my $obj, my $c) = @_;
 			$start=$obj->{start};
 		}
 
+		my $mongo=$c->app->mongo;
+		my $mongocoll=$mongo->{database}->get_collection('challenge');
+
 		my $push_challenges=sub { (my $sth) = @_;
 			my @challenges;
 			while (defined (my $row=$sth->fetchrow_hashref())) {
+				my $cid=$row->{id};
+
+				my $cursor=$mongocoll->find({ _id => $cid });
+				($row->{challenge}) = ($cursor->all);
 				push @challenges, $row;
 			}
 			$ret->{challenges}=\@challenges;
@@ -624,7 +631,7 @@ sub get_challenge { (my $obj, my $c) = @_;
 						$push_challenges->($queries->("challenges_by_tag"));
 					});
 			} elsif ((defined $obj->{user}) || (defined $obj->{name})) {
-				(my $uid, my $status, my $error_text) = user_id_or_name($obj->{uid}, $obj->{name});
+				(my $uid, my $status, my $error_text) = user_id_or_name($obj->{user}, $obj->{name});
 
 				unless (defined $uid) {
 					error_hash($ret, $status, $error_text);
