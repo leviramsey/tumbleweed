@@ -141,27 +141,7 @@ $(function() {
 /*
 challenge feed spec:
 
-<div class="challenge-container">
-	<div class="user-container">
-		<img src="--------"><br>--------
-	</div>
-	<div class="info-container">
-		<br><span id="challenge-top-text">
-			Time Remaining: ------------ /
-			Difficulty: ------ /
-			---------
-		</span>
-		<br><span id="challenge-main-text">
-			.....................................
-		</span>
-		<br><span id="challenge-sub-text">
-			---- participants /
-			View Example (-------) /
-			<span id="join-button">Join!</span>
-		</span>
-		<br><span id="tags">-------</span>
-	</div>
-</div>
+
 
 
 */
@@ -186,15 +166,26 @@ for(c in challenges) {
 %>
 
 <div>
-<a href='/challenge?id=<%= challenges[c].id %>' alt='<%= challenges[c].title %>'>
-	<strong>global</strong> <em><%= challenges[c].global %></em> <br>
-	<strong>posted</strong> <em><%= challenges[c].posted %></em> <br>
-	<strong>expiration</strong> <em><%= challenges[c].expiration %></em> <br>
-	<strong>title</strong> <em><%= challenges[c].title %></em> <br>
-	<strong>id</strong> <em><%= challenges[c].id %></em> <br>
-	<strong>poster</strong> <em><%= users[challenges[c].poster].name %></em> <br>
+	<div class="challenge-container">
+	<div class="user-container">
+		<img src="./<%= users[challenges[c].poster].avatar %>"><br><%= users[challenges[c].poster].name %>
+	</div>
+	<div class="info-container">
+		<br><span id="challenge-top-text">
+			Time Remaining: <%= challenges[c].expiration %>
+		</span>
+		<br><span id="challenge-main-text">
+		<%= challenges[c].title %>
+		</span>
+		<span id="challenge-sub-text">
+			<br><%= challenges[c].description %><br>
+			<span id="join-button">Join!</span>
+		</span>
+		<br><span id="tags">tags</span>
+	</div>
+</div>
 	
-	<hr>
+	
 </a>
 </div>
 
