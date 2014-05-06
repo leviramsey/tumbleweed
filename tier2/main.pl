@@ -13,6 +13,8 @@ use Math::Random::Secure;
 
 use Mojo::Log;
 
+use URL::Encode qw/url_encode/;
+
 use MongoDB;
 
 my $connector=DBIx::Connector->new(
@@ -85,7 +87,8 @@ sub crypt_password {
 		cnt_challenge_expiring => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration=? AND global=?',
 		cnt_challenge_noexpire => 'SELECT COUNT(*) FROM challenges WHERE id=? AND expiration IS NULL AND global=?',
 		get_challenges => 'SELECT content.id AS id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 ORDER BY posted DESC LIMIT ?,?',
-		get_challenge_by_id => 'SELECT poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND content.id=?'
+		get_challenge_by_id => 'SELECT poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND content.id=?',
+		get_icon => 'SELECT gravatar,locloc FROM user_icons WHERE uid=?',
 	);
 
 	my %queries;
@@ -301,6 +304,20 @@ sub user_info { (my $obj) = @_;
 				my $queries=sub { query_get($_[0], $dbh); };
 				$queries->('get_user_info_from_uid')->execute($uid);
 				$ret->{row}=$queries->('get_user_info_from_uid')->fetchrow_hashref();
+				die_error_hash($ret, 3, 'User ID does not exist') unless (defined $ret->{row});
+
+				$queries->('get_icon')->execute($uid);
+				(my $gravatar, my $locloc) = $queries->('get_icon')->fetchrow_array();
+				if ($gravatar) {
+					$ret->{row}->{gravatar}=1;
+				} elsif ($locloc) {
+					$ret->{row}->{avatar}=$locloc;
+				} else {
+					$ret->{row}->{avatar}='images/default.png';
+				}
+				if ($ret->{row}->{avatar}) {
+					$ret->{row}->{avatar}=url_encode($ret->{row}->{avatar});
+				}
 			});
 	}
 
