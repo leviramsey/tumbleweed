@@ -89,6 +89,10 @@ sub crypt_password {
 		get_challenges => 'SELECT content.id AS id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 ORDER BY posted DESC LIMIT ?,?',
 		get_challenge_by_id => 'SELECT poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND content.id=?',
 		get_icon => 'SELECT gravatar,locloc FROM user_icons WHERE uid=?',
+		update_user => 'UPDATE users SET email=?,verified=?,long_name=?,dob=? WHERE uid=?',
+		challenges_by_tag => 'SELECT content.id AS id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id, LEFT JOIN taggings ON content.id=target WHERE kind=0 AND tag=? ORDER BY posted DESC LIMIT ?,?',
+		active_challenges => 'SELECT content.id AS id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND (expiration IS NULL OR expiration > NOW()) ORDER BY posted DESC LIMIT ?,?',
+		challenges_by_user => 'SELECT content.id AS id,poster,posted,title,expiration,global FROM content LEFT JOIN challenges ON content.id=challenges.id WHERE kind=0 AND poster=? ORDER BY posted LIMIT ?,?',
 	);
 
 	my %queries;
@@ -315,6 +319,7 @@ sub user_info { (my $obj) = @_;
 				} else {
 					$ret->{row}->{avatar}='images/default.png';
 				}
+
 				if ($ret->{row}->{avatar}) {
 					$ret->{row}->{avatar}=url_encode($ret->{row}->{avatar});
 				}
@@ -470,6 +475,7 @@ sub add_content { (my $obj, my $c) = @_;
 
 					if ((defined $obj->{tags}) && ('ARRAY' eq ref $obj->{tags})) {
 						for (@{$obj->{tags}}) {
+							$_=~s/^#//;
 							$queries->('tag_content')->execute(lc $_, $content_id);
 						}
 					}
@@ -576,24 +582,65 @@ sub get_challenge { (my $obj, my $c) = @_;
 				}
 			});
 	} elsif ((defined $obj->{n}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
+		#Multiple challenges
 		my $n=$obj->{n};
 		my $start=0;
 		if ((defined $obj->{start}) && ($obj->{n} =~ /$res{digitx1_plus}/)) {
 			$start=$obj->{start};
 		}
-		$connector->txn(fixup => sub {
-				my $dbh=$_;
-				my $queries=sub { query_get($_[0], $dbh); };
-				$queries->("get_challenges")->execute($start, $n);
-				my @challenges;
-				while (defined(my $row=$queries->('get_challenges')->fetchrow_hashref())) {
-					push @challenges, $row;
+
+		my $push_challenges=sub { (my $sth) = @_;
+			my @challenges;
+			while (defined (my $row=$sth->fetchrow_hashref())) {
+				push @challenges, $row;
+			}
+			$ret->{challenges}=\@challenges;
+		};
+
+		unless ((defined $obj->{tag}) ||
+				(defined $obj->{active}) ||
+				(defined $obj->{user}) ||
+				(defined $obj->{name})) {
+				log_it("info", "normal multiple");
+			$connector->txn(fixup => sub {
+					my $dbh=$_;
+					my $queries=sub { query_get($_[0], $dbh); };
+					$queries->("get_challenges")->execute($start, $n);
+					$push_challenges->($queries->("get_challenges"));
+				});
+		} else {
+			if (defined $obj->{tag}) {
+				$connector->txn(fixup => sub {
+						my $dbh=$_;
+						my $queries=sub { query_get($_[0], $dbh); };
+						$queries->("challenges_by_tag")->execute($obj->{tag}, $start, $n);
+						$push_challenges->($queries->("challenges_by_tag"));
+					});
+			} elsif (defined $obj->{active}) {
+				$connector->txn(fixup => sub {
+						my $dbh=$_;
+						my $queries=sub { query_get($_[0], $dbh); };
+						$queries->("active_challenges")->execute($start, $n);
+						$push_challenges->($queries->("challenges_by_tag"));
+					});
+			} elsif ((defined $obj->{user}) || (defined $obj->{name})) {
+				(my $uid, my $status, my $error_text) = user_id_or_name($obj->{uid}, $obj->{name});
+
+				unless (defined $uid) {
+					error_hash($ret, $status, $error_text);
+				} else {
+					$connector->txn(fixup => sub {
+							my $dbh=$_;
+							my $queries=sub { query_get($_[0], $dbh); };
+							$queries->("challenges_by_user")->execute($uid, $start, $n);
+							$push_challenges->($queries->("challenges_by_user"));
+						});
 				}
-				$ret->{challenges}=\@challenges;
-			});
+			}
+		}
 	} else {
 		log_it("info", "fooey!");
-		error_hash($ret, 1, "Must specify either a challenge ID or a number of challenges to retrieve (and optionally a starting position)");
+		error_hash($ret, 3, "Must specify either a challenge ID or a number of challenges to retrieve (and optionally a starting position)");
 	}
 
 	unless ($ret->{status}) {
@@ -601,6 +648,12 @@ sub get_challenge { (my $obj, my $c) = @_;
 	}
 
 	return encode_json($ret);
+}
+
+sub update_user_info { (my $obj) = @_;
+	my $ret={ response_to => 'update_user' };
+
+	error_hash($ret, 1024, "TODO!!!!!!");
 }
 
 my %query_types = (
@@ -611,6 +664,7 @@ my %query_types = (
 	user_extinfo => \&user_extended_data,
 	add_content => \&add_content,
 	get_challenge => \&get_challenge,
+	update_user => \&update_user_info,
 );
 
 post '/query' => sub {
