@@ -22,7 +22,7 @@
 @import url("http://hello.myfonts.net/count/27db59");
 
 @font-face {
-  font-family: 'funkydori';
+  font-family: 'funkydori', 'sans-serif';
   src: url('funkydori/27DB59_0_0.eot');
   src: url('funkydori/27DB59_0_0.eot?#iefix') format('embedded-opentype'),
     url('funkydori/27DB59_0_0.eot') format('eot'),
