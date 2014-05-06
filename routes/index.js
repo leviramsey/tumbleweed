@@ -33,16 +33,36 @@ exports.feed = function(req, res) {
 	if(req.query.start)	start = req.query.start;
 		
 	Query.Challenge.gets(n,start, function(response, body) {
-		if(req.session.user) {
-			res.render('feed', {
-				title: req.session.user.name + '\'s Tumblefeed',
-				user: req.session.user,
-				challenges: body.challenges
-			});
-		}
-		else {
-			res.redirect('/');
-		}
+	
+		// The user info required for the feed view
+		users = Array();
+	
+	  var loop=function (challenges, i) {
+	  	if (i == challenges.length) {
+	  	  if (req.session.user) {
+	  	  	res.render('feed', {
+						title: req.session.user.name + '\'s Tumblefeed',
+						user: req.session.user,
+						users: users,
+						challenges: body.challenges
+					});
+				} else {
+					res.redirect('/');
+				}
+	  	} else {
+				var c=challenges[i];
+				var uid=c.poster;
+		
+		
+				Query.User.info(uid, function (body) {
+					users[uid]=body;
+					loop(challenges, i+1);
+				}, true);
+	    }
+	  };
+	  
+	  
+	  loop(body.challenges, 0);
 	});
 }
 
