@@ -43,7 +43,7 @@ $(function() {
 </head>
 <body>
 <div class="header-container"><div class="logo"><img src="./images/logo-sm.png"></div></div>
-<div class="userbar-container"><div class="userbar-picture-container"><img src="./images/iconalan.png"></div>
+<div class="userbar-container"><div class="userbar-picture-container"><img src="./<%= user.avatar %>"></div>
 	<div class="userbar-username-container">Hey there, <span id="dark"><%= user.name %></span></strong>!</div>
 	<div class="userbar-break">&nbsp;</div>
 	<a href='/logout' class="userbar-right-container"><img src="./images/iconlogout.png"><br>Log Out</a> 
@@ -55,7 +55,7 @@ $(function() {
 <div class="filler-container">.</div>
 <div class="settings-container">
 <div class="title-container"><h1>Settings</h1></div>
-<div align="center"><div id="panel-1-container"><h2>Change Icon</h2><div id="panel-1-inner-container"><div align="center"><div id="current-icon-container"><img src="./images/iconalan.png"><br>Current Icon</div>
+<div align="center"><div id="panel-1-container"><h2>Change Icon</h2><div id="panel-1-inner-container"><div align="center"><div id="current-icon-container"><img src="./<%= user.avatar %>"><br>Current Icon</div>
 <div id="vertical-divider-container"><img src="./images/vertical-divider.png"></div><div id="upload-button-container">Upload a new icon!<br><div align="left"><input type="file" class="upload" /></div></div><div id="or-container">or</div><div id="default-icons-container">Select one of these!<br><div id="default-icon-container"><img src="./images/iconmale1.png"></div><div id="default-icon-container"><img src="./images/iconfemale1.png"></div><div id="default-icon-container"><img src="./images/iconalan.png"></div><div id="default-icon-container"><img src="./images/iconfemale2.png"></div></div></div></div><div align="right"><button class="button-confirm pure-button"><i class="fa fa-check"></i> Save Changes</button></div></div></div><div id="blank-horizontal-divider"></div>
 <div id="blank-horizontal-divider"></div>
 <div align="center"><div id="panel-2-container"><h2>Change Password</h2><div id="panel-2-inner-container"><div align="center"><div id="change-password-container"><div id="change-password-label-container">Current Password<span id="required">*</span><br>New Password<span id="required">*</span><br>Confirm New Password<span id="required">*</span></div><div id="change-password-inputs-container"><input type="password" name="current-password"><br><input type="password" name="current-password"><br><input type="password" name="current-password"></div></div></div></div><div align="right"><button class="button-confirm pure-button"><i class="fa fa-check"></i> Save Changes</button></div></div></div><div id="blank-horizontal-divider"></div></div>
