@@ -5,7 +5,7 @@
 <h4>A look at tumbleweed's dependencies</h4>
 <p>As a convienience, and to make development easier across different platforms, this tumbleweed repository uses a <a href='https://www.virtualbox.org/'>virtual box</a> running <a href='http://www.vagrantup.com'>vagrant</a> to simulate a Linux 32-bit environment. If you do not have these installed already you may or may not have to get them to contribute to this project.</p>
 
-<p>tumbleweed is currently running on node.js and is currently a node application. Therefore, you may have to install node.js</p>
+<p>tumbleweed utilizes node.js and perl; perl should be included on any modern unixy system, but node.js is not yet as universal, so you may have to install it.</p>
 
 <h4>Getting started</h4>
 
@@ -20,29 +20,34 @@
 <pre>vagrant up;
 vagrant ssh;</pre>
 to set up and access the virtual machine.
-<li><h5>installing node.js</h5>
-<pre>sudo apt-get update;
-sudo apt-get install software-properties-common python-software-properties;
-sudo add-apt-repository ppa:chris-lea/node.js;
-sudo apt-get update;
-sudo apt-get install nodejs;
-</pre>
- in the app directory to get the reccomended version of node.js. You should now be able to execute:
-<pre>node -v;
-npm -v;</pre>
-after completing this step.</li>
+<li><h5>installing software and dependencies</h5>
+We have included a script to set things up on Ubuntu or another Debian-like system.
 
-<li><h5>installing node dependencies</h5>
-execute: <pre>cd ../../vagrant;
-sudo npm install;</pre>
- in the repo directory to log in to the virtual machine and install node required packages</li>
+<pre>
+cd /vagrant
+./setup-ubuntu.sh
+</pre>
+
+At some point, if MySQL hasn't been previously installed, apt-get will prompt you for a root (admin) password for MySQL.  Any password will do.
+
+Whether or not MySQL is newly installed, you will be prompted for your MySQL root password; this is not necessarily your system's root password.  We avoid storing passwords in the code, so create a file like this named /vagrant/tier2/lib/DB/Password.pm with the credentials for the user you'd like to have queries run as.
+
+<pre>
+package DB::Password;
+
+our $user='USERNAME';
+our $pass='PASSWORD';
+
+1;
+</pre>
+
 <li><h5>running the app server</h5>
 Finally, execute:
-<pre>node app.js</pre>
+<pre>./startup.sh</pre>
  to run the tumbleweed app server</li>
 <li><h5>viewing the web app</h5>
 visit:
-<pre>localhost:8080</pre>
+<pre>localhost:8081</pre>
  in any web browser to look at the site.</li>
 </ol>
 
