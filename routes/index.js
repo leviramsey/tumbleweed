@@ -13,10 +13,12 @@ exports.index = function(req, res) {
 		});
 	}
 }
+
 exports.settings = function(req, res) {
 	if(req.session.user) {
 		res.render('settings', {
-			title: 'Settings'
+			title: 'Settings',
+			user: req.session.user
 		});
 	} else {
 		res.redirect('/');
@@ -25,15 +27,23 @@ exports.settings = function(req, res) {
 
 exports.feed = function(req, res) {
 
-	if(req.session.user) {
-		res.render('feed', {
-			title: req.session.user.name + '\'s Tumblefeed',
-			user: req.session.user
-		});
-	}
-	else {
-		res.redirect('/');
-	}
+	var n = 5;
+	var start = 0;
+	if(req.query.n)	n = req.query.n;
+	if(req.query.start)	start = req.query.start;
+		
+	Query.Challenge.gets(n,start, function(response, body) {
+		if(req.session.user) {
+			res.render('feed', {
+				title: req.session.user.name + '\'s Tumblefeed',
+				user: req.session.user,
+				challenges: body.challenges
+			});
+		}
+		else {
+			res.redirect('/');
+		}
+	});
 }
 
 
