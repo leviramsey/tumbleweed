@@ -597,9 +597,10 @@ sub get_challenge { (my $obj, my $c) = @_;
 			$ret->{challenges}=\@challenges;
 		};
 
-		unless ((defined $obj->{tag}) &&
-				(defined $obj->{active}) &&
-				((defined $obj->{user}) || (defined $obj->{name}))) {
+		unless ((defined $obj->{tag}) ||
+				(defined $obj->{active}) ||
+				(defined $obj->{user}) ||
+				(defined $obj->{name})) {
 				log_it("info", "normal multiple");
 			$connector->txn(fixup => sub {
 					my $dbh=$_;
