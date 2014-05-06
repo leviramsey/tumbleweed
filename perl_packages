@@ -5,3 +5,5 @@ URL::Encode
 DBIx::Connector
 Math::Random::Secure
 MongoDB
+Digest::Bcrypt
+Crypt::Eksblowfish::Bcrypt
